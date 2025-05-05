@@ -23,7 +23,7 @@ class db_operations:
 
         self.cursor = self.connection.cursor()
 
-        print('connection made...')
+        # print('connection made...')
 
         return
     
@@ -33,8 +33,15 @@ class db_operations:
             config = json.load(file)
         return config.get('mysql', {})
     
+    # Supported operations.
+    # SELECT
+    def select(self, query):
+        self.cursor.execute(query)
+        return self.cursor.fetchall()
+    # Aggregate
+    
     # On deletion, clean up connection.
     def destructor(self):
         self.cursor.close()
         self.connection.close()
-        print("connection closed... goodbye!")
+        # print("connection closed... goodbye!")
