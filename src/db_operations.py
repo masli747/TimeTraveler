@@ -11,7 +11,7 @@ class db_operations:
     # Make a connection to the MySQL database upon creation so we can conduct DML/DQL.
     def __init__(self):
         # Get properties for connecting to server.
-        config = get_mysql_config()
+        config = self.get_mysql_config()
         
         self.connection = mysql.connector.connect(
             host = config.get('host', ''),

@@ -4,7 +4,7 @@
         "port": 3306,
         "user": "root",
         "password": "CPSC408!",
-        "database": "TimeTraveler",
+        "database": "TimeTravelingSchema",
         "_comment": "The credentials provided are only samples!"
     }
 }
