@@ -11,6 +11,31 @@ class controller:
         self.db_ops = db_operations()
         return
     
+    def select_all(self, type):
+        type = type.lower()
+
+        try:
+            match type:
+                case "travelers":
+                    target_table = "Traveler"
+                case "companions":
+                    target_table = "Companion"
+                case "vehicles":
+                    target_table = "Vehicle"
+                case "trip":
+                    target_table = "Trip"
+                case "tools":
+                    target_table = "Tool"
+                case _:
+                    raise ValueError("Invalid selection") 
+        except Exception as e:
+            print(e)
+
+        query = f"""SELECT * FROM {target_table};"""
+
+        return self.db_ops.select_query(query)
+        
+    
     def destructor(self):
         self.db_ops.destructor()
         return

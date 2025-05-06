@@ -34,11 +34,38 @@ class db_operations:
         return config.get('mysql', {})
     
     # Supported operations.
-    # SELECT
-    def select(self, query):
+    # DDL/DML
+    # function to simply execute a DDL or DML query.
+    # commits query, returns no results. 
+    # best used for insert/update/delete queries with no parameters
+    def modify_query(self, query):
+        self.cursor.execute(query)
+        self.connection.commit()
+
+    # function to simply execute a DDL or DML query with parameters
+    # commits query, returns no results. 
+    # best used for insert/update/delete queries with named placeholders
+    def modify_query_params(self, query, dictionary):
+        self.cursor.execute(query, dictionary)
+        self.connection.commit()
+
+    # DQL
+    # Selects
+    # function to simply execute a DQL query
+    # does not commit, returns results
+    # best used for select queries with no parameters
+    def select_query(self, query):
         self.cursor.execute(query)
         return self.cursor.fetchall()
-    # Aggregate
+
+    # function to simply execute a DQL query with parameters
+    # does not commit, returns results
+    # best used for select queries with named placeholders
+    def select_query_params(self, query, dictionary):
+        self.cursor.execute(query, dictionary)
+        return self.cursor.fetchall()
+    
+    # Aggregations
     
     # On deletion, clean up connection.
     def destructor(self):
