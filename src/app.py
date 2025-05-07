@@ -325,6 +325,7 @@ def build_database_view(parent):
     tool_frame = ttk.Frame(view_notebook)
 
     # Build frame widgets
+    build_view_traveler_frame(traveler_frame)
 
     # Add frames to notebook
     view_notebook.add(trip_frame, text="Trips")
@@ -334,6 +335,39 @@ def build_database_view(parent):
     view_notebook.add(tool_frame, text="Tools")
 
     return view_notebook
+
+def build_view_traveler_frame(traveler_frame):
+    global ctrl_obj
+
+    # Create the Treeview widget with columns
+    traveler_tree = ttk.Treeview(traveler_frame, columns=("id", "Name", "Age", "birthLocation", "time"), show="headings")
+
+    # Define column headings
+    traveler_tree.heading("id", text="Traveler ID")
+    traveler_tree.heading("Name", text="Name")
+    traveler_tree.heading("Age", text="Age")
+    traveler_tree.heading("birthLocation", text="Birth Location")
+    traveler_tree.heading("time", text="Current Time Period")
+
+    traveler_array = ctrl_obj.select_all("Travelers", True)
+
+    # Populate the Treeview with data from the array
+    populate_treeview(traveler_tree, traveler_array)
+
+    traveler_tree.pack(fill="both", expand=True)
+
+    traveler_tree.bind("<Enter>", lambda event: populate_treeview(traveler_tree, ctrl_obj.select_all("Travelers", True)))
+
+    return
+
+def populate_treeview(tree, data):
+    # Clear the treeview list items
+    for item in tree.get_children():
+        tree.delete(item)
+
+    # Insert updated data
+    for item in data:
+        tree.insert('', 'end', values=item)
 
 # Main builds/arranges all basic UI elements and tells tkinter to run the program.
 def main():
