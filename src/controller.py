@@ -11,7 +11,11 @@ class controller:
         self.db_ops = db_operations()
         return
     
-    def insert_companion():
+    def insert_companion(self, name, age, location, travelerID):
+        query = '''INSERT INTO Companion (name, age, originalLocation, travelerID)
+VALUES (%s, %s, %s, %s);'''
+
+        self.db_ops.modify_query_params(query, (name, age, location, travelerID))
         return
     
     def select_all(self, type, verbose):
@@ -43,7 +47,7 @@ class controller:
                 case "companions":
                     attributes = "companionID, name"
 
-        query = f"""SELECT {attributes} FROM {target_table};"""
+        query = f'''SELECT {attributes} FROM {target_table};'''
 
         return self.db_ops.select_query(query)
         

@@ -48,7 +48,24 @@ def build_add_view(parent):
 
     # View for adding Companions
     add_companion_view = ttk.Frame(insert_notebook)
+    build_add_companion_frame(add_companion_view)
 
+    # View for adding Vehicles
+    add_vehicle_view = ttk.Frame(insert_notebook)
+
+    # View for adding Tools
+    add_tool_view = ttk.Frame(insert_notebook)
+
+    # Add all views to the notebook
+    insert_notebook.add(add_trip_view, text='Add Trip')
+    insert_notebook.add(add_traveler_view, text="Add Traveler")
+    insert_notebook.add(add_companion_view, text="Add Companion")
+    insert_notebook.add(add_vehicle_view, text="Add Vehicle")
+    insert_notebook.add(add_tool_view, text="Add Tool")
+
+    return insert_notebook
+
+def build_add_companion_frame(add_companion_view):
     # Labels for all Companion Attributes
     name_label = Label(add_companion_view, text="Name:")
     age_lable = Label(add_companion_view, text="Age:")
@@ -81,21 +98,6 @@ def build_add_view(parent):
         traveler_combo.get()))
     submission_button.grid(row = 4, column = 2, sticky = S, padx = 2, pady = 2)
 
-    # View for adding Vehicles
-    add_vehicle_view = ttk.Frame(insert_notebook)
-
-    # View for adding Tools
-    add_tool_view = ttk.Frame(insert_notebook)
-
-    # Add all views to the notebook
-    insert_notebook.add(add_trip_view, text='Add Trip')
-    insert_notebook.add(add_traveler_view, text="Add Traveler")
-    insert_notebook.add(add_companion_view, text="Add Companion")
-    insert_notebook.add(add_vehicle_view, text="Add Vehicle")
-    insert_notebook.add(add_tool_view, text="Add Tool")
-
-    return insert_notebook
-
 def submit_companion(name, age, location, traveler):
     # Make sure the user wants to insert a companion.
     insert = add_confirmation("Companion")
@@ -109,7 +111,7 @@ def submit_companion(name, age, location, traveler):
         temp = traveler[0]
         if name == "" or age == "" or location == "": 
             raise ValueError
-        print(name, age, location, traveler[0] if traveler[0] != None else "")
+        # print(name, age, location, traveler[0] if traveler[0] != None else "")
     except IndexError:
         messagebox.showinfo(message='Error: Selected traveler companion is invalid!')
         return
@@ -117,8 +119,9 @@ def submit_companion(name, age, location, traveler):
         messagebox.showinfo(message='Error: Entered companion values are incorrect!')
         return
 
+    # if user wants to insert, add the companion into our db using controller.
     if insert:
-        # insert
+        ctrl_obj.insert_companion(name, age, location, traveler[0])
         messagebox.showinfo(message='Companion added!')
         return
     else:
