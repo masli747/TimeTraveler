@@ -97,20 +97,24 @@ def build_add_view(parent):
     return insert_notebook
 
 def submit_companion(name, age, location, traveler):
-    insert = messagebox.askyesno(message='Are you sure you want to add this companion?',
-                                 icon='question',
-                                 title='Add Confirmation')
+    # Make sure the user wants to insert a companion.
+    insert = add_confirmation("Companion")
     
+    # Break out early if not returning
+    if not insert:
+        return
+    
+    # Check user input for errors
     try:
         temp = traveler[0]
         if name == "" or age == "" or location == "": 
             raise ValueError
         print(name, age, location, traveler[0] if traveler[0] != None else "")
     except IndexError:
-        messagebox.showinfo(message='Selected traveler companion is invalid!')
+        messagebox.showinfo(message='Error: Selected traveler companion is invalid!')
         return
     except:
-        messagebox.showinfo(message='Entered companion values are incorrect!')
+        messagebox.showinfo(message='Error: Entered companion values are incorrect!')
         return
 
     if insert:
@@ -119,6 +123,11 @@ def submit_companion(name, age, location, traveler):
         return
     else:
         return
+
+def add_confirmation(message):
+    return messagebox.askyesno(message=f'Are you sure you want to add this {message}?',
+                                 icon='question',
+                                 title='Add Confirmation')
 
 # Main builds/arranges all basic UI elements and tells tkinter to run the program.
 def main():
