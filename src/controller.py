@@ -25,6 +25,20 @@ VALUES (%s, %s, %s, %s);'''
         self.db_ops.modify_query_params(query, (name, age, location, travelerID))
         return
     
+    def insert_vehicle(self, name, power_capacity, engine, travelerID):
+        query = '''INSERT INTO Vehicle (name, powerCapacity, engine, travelerID)
+VALUES (%s, %s, %s, %s)'''
+
+        self.db_ops.modify_query_params(query, (name, power_capacity, engine, travelerID))
+        return
+
+    def insert_tool(self, name, power_capacity, travelerID):
+        query = '''INSERT INTO Tool (name, powerCapacity, travelerID)
+VALUES (%s, %s, %s)'''
+
+        self.db_ops.modify_query_params(query, (name, power_capacity, travelerID))
+        return
+    
     def select_all(self, type, verbose):
         type = type.lower()
 
