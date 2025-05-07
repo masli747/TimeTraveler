@@ -53,6 +53,7 @@ def build_add_view(parent):
 
     # View for adding Vehicles
     add_vehicle_view = ttk.Frame(insert_notebook)
+    build_add_vehicle_frame(add_vehicle_view)
 
     # View for adding Tools
     add_tool_view = ttk.Frame(insert_notebook)
@@ -133,6 +134,43 @@ def build_add_companion_frame(add_companion_view):
     submission_button.grid(row = 4, column = 2, sticky = S, padx = 2, pady = 2)
     return
 
+def build_add_vehicle_frame(add_vehicle_view):
+    # Labels for all Vehicle Attributes
+    name_label = Label(add_vehicle_view, text="Name:")
+    age_lable = Label(add_vehicle_view, text="Power Capacity:")
+    location_lable = Label(add_vehicle_view, text="Engine:")
+    traveler_lable = Label(add_vehicle_view, text="Piloted By:")
+    name_label.grid(row = 0, column = 0, sticky = W, padx = 2, pady = 2)
+    age_lable.grid(row = 1, column = 0, sticky = W, padx = 2, pady = 2)
+    location_lable.grid(row = 2, column = 0, sticky = W, padx = 2, pady = 2)
+    traveler_lable.grid(row = 3, column = 0, sticky = W, padx = 2, pady = 2)
+
+    # Strings and Entry widgets for all Vehicle Attributes
+    name_string = StringVar()
+    power_string = StringVar()
+    engine_string = StringVar()
+    valid_travelers = ctrl_obj.select_all("Travelers", False)
+    name_entry = Entry(add_vehicle_view, textvariable=name_string)
+    power_entry = Entry(add_vehicle_view, textvariable=power_string)
+    engine_entry = Entry(add_vehicle_view, textvariable=engine_string)
+    traveler_combo = ttk.Combobox(add_vehicle_view, values=valid_travelers, state="readonly")
+    name_entry.grid(row = 0, column = 1, pady = 2)
+    power_entry.grid(row = 1, column = 1, pady = 2)
+    engine_entry.grid(row = 2, column = 1, pady = 2)
+    traveler_combo.grid(row = 3, column = 1, pady = 2)
+
+    # Update the list of valid travelers whenever the user mouses over the combo
+    # Makes sure recently added travelers are avaliable to choose.
+    traveler_combo.bind("<Enter>", lambda event: update_companion_travelers(event, traveler_combo))
+
+    # Button to submit all attributes to controller for insertion.
+    submission_button = Button(add_vehicle_view, text="Add", command=lambda: submit_vehicle(
+        name_string.get(), 
+        power_string.get(), 
+        engine_string.get(), 
+        traveler_combo.get()))
+    submission_button.grid(row = 4, column = 2, sticky = S, padx = 2, pady = 2)
+
 def update_companion_travelers(event, combo):
     # Use config to update the set of acceptable travelers.
     combo.config(values=ctrl_obj.select_all("Travelers", False))
@@ -185,6 +223,34 @@ def submit_companion(name, age, location, traveler):
     if insert:
         ctrl_obj.insert_companion(name, age, location, traveler[0])
         messagebox.showinfo(message='Companion added!')
+        return
+    else:
+        return
+    
+def submit_vehicle(name, power_capacity, engine, traveler):
+    insert = add_confirmation("Vehicle")
+
+    # Break out early if not returning
+    if not insert:
+        return
+    
+    # Check user input for errors
+    try:
+        temp = traveler[0]
+        if name == "" or power_capacity == "" or engine == "": 
+            raise ValueError
+        # print(name, age, location, traveler[0] if traveler[0] != None else "")
+    except IndexError:
+        messagebox.showinfo(message='Error: Selected traveler is invalid!')
+        return
+    except:
+        messagebox.showinfo(message='Error: Entered vehicle values are incorrect!')
+        return
+
+    # if user wants to insert, add the companion into our db using controller.
+    if insert:
+        ctrl_obj.insert_vehicle(name, power_capacity, engine, traveler[0])
+        messagebox.showinfo(message='Vehicle added!')
         return
     else:
         return
