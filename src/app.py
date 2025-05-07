@@ -7,6 +7,7 @@
 # Library imports
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 
 # Local DB imports
 from controller import controller
@@ -72,9 +73,12 @@ def build_add_view(parent):
     location_entry.grid(row = 2, column = 1, pady = 2)
     traveler_combo.grid(row = 3, column = 1, pady = 2)
     
-
     # Button to submit all attributes to controller for insertion.
-    submission_button = Button(add_companion_view, text="Add", command=dummy_three)
+    submission_button = Button(add_companion_view, text="Add", command=lambda: submit_companion(
+        name_string.get(), 
+        age_string.get(), 
+        location_string.get(), 
+        traveler_combo.get()))
     submission_button.grid(row = 4, column = 2, sticky = S, padx = 2, pady = 2)
 
     # View for adding Vehicles
@@ -91,6 +95,30 @@ def build_add_view(parent):
     insert_notebook.add(add_tool_view, text="Add Tool")
 
     return insert_notebook
+
+def submit_companion(name, age, location, traveler):
+    insert = messagebox.askyesno(message='Are you sure you want to add this companion?',
+                                 icon='question',
+                                 title='Add Confirmation')
+    
+    try:
+        temp = traveler[0]
+        if name == "" or age == "" or location == "": 
+            raise ValueError
+        print(name, age, location, traveler[0] if traveler[0] != None else "")
+    except IndexError:
+        messagebox.showinfo(message='Selected traveler companion is invalid!')
+        return
+    except:
+        messagebox.showinfo(message='Entered companion values are incorrect!')
+        return
+
+    if insert:
+        # insert
+        messagebox.showinfo(message='Companion added!')
+        return
+    else:
+        return
 
 # Main builds/arranges all basic UI elements and tells tkinter to run the program.
 def main():

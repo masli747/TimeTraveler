@@ -11,6 +11,9 @@ class controller:
         self.db_ops = db_operations()
         return
     
+    def insert_companion():
+        return
+    
     def select_all(self, type, verbose):
         type = type.lower()
 
