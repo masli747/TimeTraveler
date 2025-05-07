@@ -25,12 +25,6 @@ def on_closing():
 
     ctrl_obj.destructor()
 
-def dummy_too():
-    return ctrl_obj.dummy_function()
-
-def dummy_three():
-    print("Hello again, world!")
-
 def build_add_view(parent):
     global ctrl_obj
 
@@ -40,7 +34,7 @@ def build_add_view(parent):
     # View for adding Trips
     add_trip_view = ttk.Frame(insert_notebook)
 
-    test = Label(add_trip_view, text=dummy_too())    
+    test = Label(add_trip_view, text="Inserting Trips")    
     test.pack()
 
     # View for adding Travelers

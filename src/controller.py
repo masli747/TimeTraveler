@@ -71,9 +71,6 @@ VALUES (%s, %s, %s)'''
         query = f'''SELECT {attributes} FROM {target_table};'''
 
         return self.db_ops.select_query(query)
-        
-    def dummy_function(self):
-        return "Hello, World!"
     
     def destructor(self):
         self.db_ops.destructor()
