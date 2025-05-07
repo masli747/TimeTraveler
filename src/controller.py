@@ -67,6 +67,8 @@ VALUES (%s, %s, %s)'''
                     attributes = "travelerID, name"
                 case "companions":
                     attributes = "companionID, name"
+                case _:
+                    attributes = "*"
 
         query = f'''SELECT {attributes} FROM {target_table};'''
 
