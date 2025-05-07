@@ -62,7 +62,7 @@ def build_add_view(parent):
     name_string = StringVar()
     age_string = StringVar()
     location_string = StringVar()
-    valid_travelers = ["test one", "test two"]
+    valid_travelers = ctrl_obj.select_all("Travelers", False)
     name_entry = Entry(add_companion_view, textvariable=name_string)
     age_entry = Entry(add_companion_view, textvariable=age_string)
     location_entry = Entry(add_companion_view, textvariable=location_string)

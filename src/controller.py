@@ -11,7 +11,7 @@ class controller:
         self.db_ops = db_operations()
         return
     
-    def select_all(self, type):
+    def select_all(self, type, verbose):
         type = type.lower()
 
         try:
@@ -27,11 +27,20 @@ class controller:
                 case "tools":
                     target_table = "Tool"
                 case _:
-                    raise ValueError("Invalid selection") 
+                    raise ValueError("Invalid Table Selection!") 
         except Exception as e:
             print(e)
 
-        query = f"""SELECT * FROM {target_table};"""
+        if verbose:
+            attributes = "*"
+        else:
+            match type:
+                case "travelers":
+                    attributes = "travelerID, name"
+                case "companions":
+                    attributes = "companionID, name"
+
+        query = f"""SELECT {attributes} FROM {target_table};"""
 
         return self.db_ops.select_query(query)
         
