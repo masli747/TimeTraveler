@@ -31,34 +31,29 @@ def build_add_view(parent):
     # Notebook containing subviews that we will return
     insert_notebook = ttk.Notebook(parent)
 
-    # View for adding Trips
+    # Frames that will hold widgets in the notebook
     add_trip_view = ttk.Frame(insert_notebook)
+    add_traveler_view = ttk.Frame(insert_notebook)
+    add_companion_view = ttk.Frame(insert_notebook)
+    add_vehicle_view = ttk.Frame(insert_notebook)
+    add_tool_view = ttk.Frame(insert_notebook)
 
+    # FIXME: Remove later!
     test = Label(add_trip_view, text="Inserting Trips")    
     test.pack()
 
-    # View for adding Travelers
-    add_traveler_view = ttk.Frame(insert_notebook)
+    # Build each frame's widgets
     build_add_traveler_frame(add_traveler_view)
-
-    # View for adding Companions
-    add_companion_view = ttk.Frame(insert_notebook)
     build_add_companion_frame(add_companion_view)
-
-    # View for adding Vehicles
-    add_vehicle_view = ttk.Frame(insert_notebook)
     build_add_vehicle_frame(add_vehicle_view)
-
-    # View for adding Tools
-    add_tool_view = ttk.Frame(insert_notebook)
     build_add_tool_frame(add_tool_view)
 
     # Add all views to the notebook
-    insert_notebook.add(add_trip_view, text='Add Trip')
-    insert_notebook.add(add_traveler_view, text="Add Traveler")
-    insert_notebook.add(add_companion_view, text="Add Companion")
-    insert_notebook.add(add_vehicle_view, text="Add Vehicle")
-    insert_notebook.add(add_tool_view, text="Add Tool")
+    insert_notebook.add(add_trip_view, text='Trip')
+    insert_notebook.add(add_traveler_view, text="Traveler")
+    insert_notebook.add(add_companion_view, text="Companion")
+    insert_notebook.add(add_vehicle_view, text="Vehicle")
+    insert_notebook.add(add_tool_view, text="Tool")
 
     return insert_notebook
 
@@ -316,6 +311,30 @@ def add_confirmation(message):
                                  icon='question',
                                  title='Add Confirmation')
 
+def build_database_view(parent):
+    global ctrl_obj
+
+    # Notebook containing subviews that we will return
+    view_notebook = ttk.Notebook(parent)
+
+    # Frames for viewing entities
+    trip_frame = ttk.Frame(view_notebook)
+    traveler_frame = ttk.Frame(view_notebook)
+    companion_frame = ttk.Frame(view_notebook)
+    vehicle_frame = ttk.Frame(view_notebook)
+    tool_frame = ttk.Frame(view_notebook)
+
+    # Build frame widgets
+
+    # Add frames to notebook
+    view_notebook.add(trip_frame, text="Trips")
+    view_notebook.add(traveler_frame, text="Travelers")
+    view_notebook.add(companion_frame, text="Companions")
+    view_notebook.add(vehicle_frame, text="Vehicles")
+    view_notebook.add(tool_frame, text="Tools")
+
+    return view_notebook
+
 # Main builds/arranges all basic UI elements and tells tkinter to run the program.
 def main():
     # Get our reference to the controller
@@ -330,23 +349,16 @@ def main():
     root_notebook = ttk.Notebook(root)
 
     # Define the notebook's views.
-    # First page (Adding).
     add_view = ttk.Frame(root_notebook)   
-
-    # Widgets/elements for the first page.
-    insert_views = build_add_view(add_view)
-    insert_views.pack(fill="both", expand=True)
-
-    # Second page (Editing).
     edit_view = ttk.Frame(root_notebook)  
-
-    # Widgets/elements for the second page.
-
-    # Third page (viewing).
     database_view = ttk.Frame(root_notebook)
-
-    # Fourth page (exporting/reports).
     export_view = ttk.Frame(root_notebook)
+
+    # Build the subframes for each view, and insert
+    add_view_frames = build_add_view(add_view)
+    add_view_frames.pack(fill="both", expand=True)
+    database_view_frames = build_database_view(database_view)
+    database_view_frames.pack(fill="both", expand=True)
 
     # Add pages to the notebook.
     root_notebook.add(add_view, text='Add')
