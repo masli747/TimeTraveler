@@ -71,9 +71,9 @@ def build_add_traveler_frame(add_traveler_view):
     name_label = Label(add_traveler_view, text="Name:")
     age_lable = Label(add_traveler_view, text="Age:")
     location_lable = Label(add_traveler_view, text="Original Location:")
-    name_label.grid(row = 0, column = 0, sticky = W, padx = 2, pady = 2)
-    age_lable.grid(row = 1, column = 0, sticky = W, padx = 2, pady = 2)
-    location_lable.grid(row = 2, column = 0, sticky = W, padx = 2, pady = 2)
+    name_label.grid(row = 0, column = 0, sticky = W, padx = 4, pady = 2)
+    age_lable.grid(row = 1, column = 0, sticky = W, padx = 4, pady = 2)
+    location_lable.grid(row = 2, column = 0, sticky = W, padx = 4, pady = 2)
 
     # Strings and Entry widgets for all Companion Attributes
     name_string = StringVar()
@@ -87,7 +87,10 @@ def build_add_traveler_frame(add_traveler_view):
     location_entry.grid(row = 2, column = 1, pady = 2)
 
     # Button to submit all attributes to controller for insertion.
-    submission_button = Button(add_traveler_view, text="Add")
+    submission_button = Button(add_traveler_view, text="Add", command=lambda: submit_traveler(
+        name_string.get(), 
+        age_string.get(), 
+        location_string.get()))
     submission_button.grid(row = 3, column = 2, sticky = S, padx = 2, pady = 2)
 
     return
@@ -116,6 +119,10 @@ def build_add_companion_frame(add_companion_view):
     age_entry.grid(row = 1, column = 1, pady = 2)
     location_entry.grid(row = 2, column = 1, pady = 2)
     traveler_combo.grid(row = 3, column = 1, pady = 2)
+
+    # Update the list of valid travelers whenever the user mouses over the combo
+    # Makes sure recently added travelers are avaliable to choose.
+    traveler_combo.bind("<Enter>", lambda event: update_companion_travelers(event, traveler_combo))
     
     # Button to submit all attributes to controller for insertion.
     submission_button = Button(add_companion_view, text="Add", command=lambda: submit_companion(
@@ -124,6 +131,34 @@ def build_add_companion_frame(add_companion_view):
         location_string.get(), 
         traveler_combo.get()))
     submission_button.grid(row = 4, column = 2, sticky = S, padx = 2, pady = 2)
+    return
+
+def update_companion_travelers(event, combo):
+    # Use config to update the set of acceptable travelers.
+    combo.config(values=ctrl_obj.select_all("Travelers", False))
+    return
+
+def submit_traveler(name, age, location):
+    # Make sure the user wants to insert a companion.
+    insert = add_confirmation("Traveler")
+
+    # Break out early if not returning
+    if not insert:
+        return
+    
+    # Check user input for errors
+    try:
+        if name == "" or age == "" or location == "": 
+            raise ValueError
+    except:
+        messagebox.showinfo(message='Error: Entered traveler values are incorrect!')
+        return
+    
+    # if user wants to insert, add the traveler into our db using controller.
+    if insert:
+        ctrl_obj.insert_traveler(name, age, location)
+        messagebox.showinfo(message='Traveler added!')
+    return
 
 def submit_companion(name, age, location, traveler):
     # Make sure the user wants to insert a companion.
