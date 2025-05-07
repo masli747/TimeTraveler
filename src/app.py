@@ -11,30 +11,96 @@ from tkinter import ttk
 # Local DB imports
 from controller import controller
 
+ctrl_obj = None
+
+def init():
+    global ctrl_obj
+
+    if ctrl_obj is None:
+        ctrl_obj = controller()
+
+def on_closing():
+    global ctrl_obj
+
+    ctrl_obj.destructor()
+
+def dummy_too():
+    return ctrl_obj.dummy_function()
+
+def dummy_three():
+    print("Hello again, world!")
 
 def build_add_view(parent):
+    global ctrl_obj
+
     # Notebook containing subviews that we will return
     insert_notebook = ttk.Notebook(parent)
 
     # View for adding Trips
-    trip_view = ttk.Frame(insert_notebook)
+    add_trip_view = ttk.Frame(insert_notebook)
 
-    test = Label(trip_view, text="Add a trip")    
+    test = Label(add_trip_view, text=dummy_too())    
     test.pack()
 
     # View for adding Travelers
+    add_traveler_view = ttk.Frame(insert_notebook)
+
+    # View for adding Companions
+    add_companion_view = ttk.Frame(insert_notebook)
+
+    # Labels for all Companion Attributes
+    name_label = Label(add_companion_view, text="Name:")
+    age_lable = Label(add_companion_view, text="Age:")
+    location_lable = Label(add_companion_view, text="Original Location:")
+    traveler_lable = Label(add_companion_view, text="Travels With:")
+    name_label.grid(row = 0, column = 0, sticky = W, padx = 2, pady = 2)
+    age_lable.grid(row = 1, column = 0, sticky = W, padx = 2, pady = 2)
+    location_lable.grid(row = 2, column = 0, sticky = W, padx = 2, pady = 2)
+    traveler_lable.grid(row = 3, column = 0, sticky = W, padx = 2, pady = 2)
+    
+    # Strings and Entry widgets for all Companion Attributes
+    name_string = StringVar()
+    age_string = StringVar()
+    location_string = StringVar()
+    valid_travelers = ["test one", "test two"]
+    name_entry = Entry(add_companion_view, textvariable=name_string)
+    age_entry = Entry(add_companion_view, textvariable=age_string)
+    location_entry = Entry(add_companion_view, textvariable=location_string)
+    traveler_combo = ttk.Combobox(add_companion_view, values=valid_travelers, state="readonly")
+    name_entry.grid(row = 0, column = 1, pady = 2)
+    age_entry.grid(row = 1, column = 1, pady = 2)
+    location_entry.grid(row = 2, column = 1, pady = 2)
+    traveler_combo.grid(row = 3, column = 1, pady = 2)
+    
+
+    # Button to submit all attributes to controller for insertion.
+    submission_button = Button(add_companion_view, text="Add", command=dummy_three)
+    submission_button.grid(row = 4, column = 2, sticky = S, padx = 2, pady = 2)
+
+    # View for adding Vehicles
+    add_vehicle_view = ttk.Frame(insert_notebook)
+
+    # View for adding Tools
+    add_tool_view = ttk.Frame(insert_notebook)
 
     # Add all views to the notebook
-    insert_notebook.add(trip_view, text='Add Trip')
-    
+    insert_notebook.add(add_trip_view, text='Add Trip')
+    insert_notebook.add(add_traveler_view, text="Add Traveler")
+    insert_notebook.add(add_companion_view, text="Add Companion")
+    insert_notebook.add(add_vehicle_view, text="Add Vehicle")
+    insert_notebook.add(add_tool_view, text="Add Tool")
+
     return insert_notebook
 
 # Main builds/arranges all basic UI elements and tells tkinter to run the program.
 def main():
+    # Get our reference to the controller
+    init()
+
     # Define the root window.
     root = Tk()
     root.title("The Time Traveler's Database")
-    root.geometry("600x400")
+    root.geometry("960x720")
 
     # Make a notebook, so we can switch between views.
     root_notebook = ttk.Notebook(root)
