@@ -45,6 +45,7 @@ def build_add_view(parent):
 
     # View for adding Travelers
     add_traveler_view = ttk.Frame(insert_notebook)
+    build_add_traveler_frame(add_traveler_view)
 
     # View for adding Companions
     add_companion_view = ttk.Frame(insert_notebook)
@@ -66,42 +67,63 @@ def build_add_view(parent):
     return insert_notebook
 
 def build_add_traveler_frame(add_traveler_view):
+    # Labels for all traveler Attributes
+    name_label = Label(add_traveler_view, text="Name:")
+    age_lable = Label(add_traveler_view, text="Age:")
+    location_lable = Label(add_traveler_view, text="Original Location:")
+    name_label.grid(row = 0, column = 0, sticky = W, padx = 2, pady = 2)
+    age_lable.grid(row = 1, column = 0, sticky = W, padx = 2, pady = 2)
+    location_lable.grid(row = 2, column = 0, sticky = W, padx = 2, pady = 2)
+
+    # Strings and Entry widgets for all Companion Attributes
+    name_string = StringVar()
+    age_string = StringVar()
+    location_string = StringVar()
+    name_entry = Entry(add_traveler_view, textvariable=name_string)
+    age_entry = Entry(add_traveler_view, textvariable=age_string)
+    location_entry = Entry(add_traveler_view, textvariable=location_string)
+    name_entry.grid(row = 0, column = 1, pady = 2)
+    age_entry.grid(row = 1, column = 1, pady = 2)
+    location_entry.grid(row = 2, column = 1, pady = 2)
+
+    # Button to submit all attributes to controller for insertion.
+    submission_button = Button(add_traveler_view, text="Add")
+    submission_button.grid(row = 3, column = 2, sticky = S, padx = 2, pady = 2)
 
     return
 
 def build_add_companion_frame(add_companion_view):
     # Labels for all Companion Attributes
-    companion_name_label = Label(add_companion_view, text="Name:")
-    companion_age_lable = Label(add_companion_view, text="Age:")
-    companion_location_lable = Label(add_companion_view, text="Original Location:")
-    companion_traveler_lable = Label(add_companion_view, text="Travels With:")
-    companion_name_label.grid(row = 0, column = 0, sticky = W, padx = 2, pady = 2)
-    companion_age_lable.grid(row = 1, column = 0, sticky = W, padx = 2, pady = 2)
-    companion_location_lable.grid(row = 2, column = 0, sticky = W, padx = 2, pady = 2)
-    companion_traveler_lable.grid(row = 3, column = 0, sticky = W, padx = 2, pady = 2)
+    name_label = Label(add_companion_view, text="Name:")
+    age_lable = Label(add_companion_view, text="Age:")
+    location_lable = Label(add_companion_view, text="Original Location:")
+    traveler_lable = Label(add_companion_view, text="Travels With:")
+    name_label.grid(row = 0, column = 0, sticky = W, padx = 2, pady = 2)
+    age_lable.grid(row = 1, column = 0, sticky = W, padx = 2, pady = 2)
+    location_lable.grid(row = 2, column = 0, sticky = W, padx = 2, pady = 2)
+    traveler_lable.grid(row = 3, column = 0, sticky = W, padx = 2, pady = 2)
     
     # Strings and Entry widgets for all Companion Attributes
-    companion_name_string = StringVar()
-    companion_age_string = StringVar()
-    companion_location_string = StringVar()
-    companion_valid_travelers = ctrl_obj.select_all("Travelers", False)
-    companion_name_entry = Entry(add_companion_view, textvariable=companion_name_string)
-    companion_age_entry = Entry(add_companion_view, textvariable=companion_age_string)
-    companion_location_entry = Entry(add_companion_view, textvariable=companion_location_string)
-    companion_traveler_combo = ttk.Combobox(add_companion_view, values=companion_valid_travelers, state="readonly")
-    companion_name_entry.grid(row = 0, column = 1, pady = 2)
-    companion_age_entry.grid(row = 1, column = 1, pady = 2)
-    companion_location_entry.grid(row = 2, column = 1, pady = 2)
-    companion_traveler_combo.grid(row = 3, column = 1, pady = 2)
+    name_string = StringVar()
+    age_string = StringVar()
+    location_string = StringVar()
+    valid_travelers = ctrl_obj.select_all("Travelers", False)
+    name_entry = Entry(add_companion_view, textvariable=name_string)
+    age_entry = Entry(add_companion_view, textvariable=age_string)
+    location_entry = Entry(add_companion_view, textvariable=location_string)
+    traveler_combo = ttk.Combobox(add_companion_view, values=valid_travelers, state="readonly")
+    name_entry.grid(row = 0, column = 1, pady = 2)
+    age_entry.grid(row = 1, column = 1, pady = 2)
+    location_entry.grid(row = 2, column = 1, pady = 2)
+    traveler_combo.grid(row = 3, column = 1, pady = 2)
     
     # Button to submit all attributes to controller for insertion.
     submission_button = Button(add_companion_view, text="Add", command=lambda: submit_companion(
-        companion_name_string.get(), 
-        companion_age_string.get(), 
-        companion_location_string.get(), 
-        companion_traveler_combo.get()))
+        name_string.get(), 
+        age_string.get(), 
+        location_string.get(), 
+        traveler_combo.get()))
     submission_button.grid(row = 4, column = 2, sticky = S, padx = 2, pady = 2)
-    return
 
 def submit_companion(name, age, location, traveler):
     # Make sure the user wants to insert a companion.
