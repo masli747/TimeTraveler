@@ -50,7 +50,7 @@ VALUES (%s, %s, %s)'''
                     target_table = "Companion"
                 case "vehicles":
                     target_table = "Vehicle"
-                case "trip":
+                case "trips":
                     target_table = "Trip"
                 case "tools":
                     target_table = "Tool"
