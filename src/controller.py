@@ -50,7 +50,7 @@ VALUES (%s, %s, %s)'''
                     target_table = "Companion"
                 case "vehicles":
                     target_table = "Vehicle"
-                case "trip":
+                case "trips":
                     target_table = "Trip"
                 case "tools":
                     target_table = "Tool"
@@ -67,13 +67,12 @@ VALUES (%s, %s, %s)'''
                     attributes = "travelerID, name"
                 case "companions":
                     attributes = "companionID, name"
+                case _:
+                    attributes = "*"
 
         query = f'''SELECT {attributes} FROM {target_table};'''
 
         return self.db_ops.select_query(query)
-        
-    def dummy_function(self):
-        return "Hello, World!"
     
     def destructor(self):
         self.db_ops.destructor()

@@ -25,46 +25,35 @@ def on_closing():
 
     ctrl_obj.destructor()
 
-def dummy_too():
-    return ctrl_obj.dummy_function()
-
-def dummy_three():
-    print("Hello again, world!")
-
 def build_add_view(parent):
     global ctrl_obj
 
     # Notebook containing subviews that we will return
     insert_notebook = ttk.Notebook(parent)
 
-    # View for adding Trips
+    # Frames that will hold widgets in the notebook
     add_trip_view = ttk.Frame(insert_notebook)
+    add_traveler_view = ttk.Frame(insert_notebook)
+    add_companion_view = ttk.Frame(insert_notebook)
+    add_vehicle_view = ttk.Frame(insert_notebook)
+    add_tool_view = ttk.Frame(insert_notebook)
 
-    test = Label(add_trip_view, text=dummy_too())    
+    # FIXME: Remove later!
+    test = Label(add_trip_view, text="Inserting Trips")    
     test.pack()
 
-    # View for adding Travelers
-    add_traveler_view = ttk.Frame(insert_notebook)
+    # Build each frame's widgets
     build_add_traveler_frame(add_traveler_view)
-
-    # View for adding Companions
-    add_companion_view = ttk.Frame(insert_notebook)
     build_add_companion_frame(add_companion_view)
-
-    # View for adding Vehicles
-    add_vehicle_view = ttk.Frame(insert_notebook)
     build_add_vehicle_frame(add_vehicle_view)
-
-    # View for adding Tools
-    add_tool_view = ttk.Frame(insert_notebook)
     build_add_tool_frame(add_tool_view)
 
     # Add all views to the notebook
-    insert_notebook.add(add_trip_view, text='Add Trip')
-    insert_notebook.add(add_traveler_view, text="Add Traveler")
-    insert_notebook.add(add_companion_view, text="Add Companion")
-    insert_notebook.add(add_vehicle_view, text="Add Vehicle")
-    insert_notebook.add(add_tool_view, text="Add Tool")
+    insert_notebook.add(add_trip_view, text='Trip')
+    insert_notebook.add(add_traveler_view, text="Traveler")
+    insert_notebook.add(add_companion_view, text="Companion")
+    insert_notebook.add(add_vehicle_view, text="Vehicle")
+    insert_notebook.add(add_tool_view, text="Tool")
 
     return insert_notebook
 
@@ -322,6 +311,174 @@ def add_confirmation(message):
                                  icon='question',
                                  title='Add Confirmation')
 
+def build_database_view(parent):
+    global ctrl_obj
+
+    # Notebook containing subviews that we will return
+    view_notebook = ttk.Notebook(parent)
+
+    # Frames for viewing entities
+    trip_frame = ttk.Frame(view_notebook)
+    traveler_frame = ttk.Frame(view_notebook)
+    companion_frame = ttk.Frame(view_notebook)
+    vehicle_frame = ttk.Frame(view_notebook)
+    tool_frame = ttk.Frame(view_notebook)
+
+    # Build frame widgets
+    build_view_trip_frame(trip_frame)
+    build_view_traveler_frame(traveler_frame)
+    build_view_companion_frame(companion_frame)
+    build_view_vehicle_frame(vehicle_frame)
+    build_view_tool_frame(tool_frame)
+
+    # Add frames to notebook
+    view_notebook.add(trip_frame, text="Trips")
+    view_notebook.add(traveler_frame, text="Travelers")
+    view_notebook.add(companion_frame, text="Companions")
+    view_notebook.add(vehicle_frame, text="Vehicles")
+    view_notebook.add(tool_frame, text="Tools")
+
+    return view_notebook
+
+def build_view_trip_frame(trip_frame):
+    global ctrl_obj
+
+    # Create the Treeview widget with columns
+    trip_tree = ttk.Treeview(trip_frame, columns=("id", "location", "date", "image", "ttid"), show="headings")
+
+    # Define column headings
+    trip_tree.heading("id", text="Trip ID")
+    trip_tree.heading("location", text="Location")
+    trip_tree.heading("date", text="Date")
+    trip_tree.heading("image", text="Image File")
+    trip_tree.heading("ttid", text="Traveler ID")
+
+    # Get data from database to display
+    trip_array = ctrl_obj.select_all("Trips", True)
+
+    # Populate the Treeview with data from the array
+    populate_treeview(trip_tree, trip_array)
+
+    # Arrange the tree within the frame
+    trip_tree.pack(fill="both", expand=True)
+
+    # Dynamically update on cursor hover
+    trip_tree.bind("<Enter>", lambda event: populate_treeview(trip_tree, ctrl_obj.select_all("Trips", True)))
+    return
+
+def build_view_traveler_frame(traveler_frame):
+    global ctrl_obj
+
+    # Create the Treeview widget with columns
+    traveler_tree = ttk.Treeview(traveler_frame, columns=("id", "Name", "Age", "birthLocation", "time"), show="headings")
+
+    # Define column headings
+    traveler_tree.heading("id", text="Traveler ID")
+    traveler_tree.heading("Name", text="Name")
+    traveler_tree.heading("Age", text="Age")
+    traveler_tree.heading("birthLocation", text="Birth Location")
+    traveler_tree.heading("time", text="Current Time Period")
+
+    # Get data from database to display
+    traveler_array = ctrl_obj.select_all("Travelers", True)
+
+    # Populate the Treeview with data from the array
+    populate_treeview(traveler_tree, traveler_array)
+
+    # Arrange the tree within the frame
+    traveler_tree.pack(fill="both", expand=True)
+
+    # Dynamically update on cursor hover
+    traveler_tree.bind("<Enter>", lambda event: populate_treeview(traveler_tree, ctrl_obj.select_all("Travelers", True)))
+    return
+
+def build_view_companion_frame(companion_frame):
+    global ctrl_obj
+
+    # Create the Treeview widget with columns
+    companion_tree = ttk.Treeview(companion_frame, columns=("id", "Name", "Age", "originalLocation", "time", "ttid"), show="headings")
+
+    # Define column headings
+    companion_tree.heading("id", text="Companion ID")
+    companion_tree.heading("Name", text="Name")
+    companion_tree.heading("Age", text="Age")
+    companion_tree.heading("originalLocation", text="Original Location")
+    companion_tree.heading("time", text="Current Time Period")
+    companion_tree.heading("ttid", text="Traveler ID")
+
+    # Get data from database to display
+    companion_array = ctrl_obj.select_all("Companions", True)
+
+    # Populate the Treeview with data from the array
+    populate_treeview(companion_tree, companion_array)
+
+    # Arrange the tree within the frame
+    companion_tree.pack(fill="both", expand=True)
+
+    # Dynamically update on cursor hover
+    companion_tree.bind("<Enter>", lambda event: populate_treeview(companion_tree, ctrl_obj.select_all("Companions", True)))
+    return
+
+def build_view_vehicle_frame(vehicle_frame):
+    global ctrl_obj
+
+    # Create the Treeview widget with columns
+    vehicle_tree = ttk.Treeview(vehicle_frame, columns=("id", "name", "capacity", "engine", "ttid"), show="headings")
+
+    # Define column headings
+    vehicle_tree.heading("id", text="Vehicle ID")
+    vehicle_tree.heading("name", text="Name")
+    vehicle_tree.heading("capacity", text="Power Capacity")
+    vehicle_tree.heading("engine", text="Engine")
+    vehicle_tree.heading("ttid", text="Traveler ID")
+
+    # Get data from database to display
+    vehicle_array = ctrl_obj.select_all("Vehicles", True)
+
+    # Populate the Treeview with data from the array
+    populate_treeview(vehicle_tree, vehicle_array)
+
+    # Arrange the tree within the frame
+    vehicle_tree.pack(fill="both", expand=True)
+
+    # Dynamically update on cursor hover
+    vehicle_tree.bind("<Enter>", lambda event: populate_treeview(vehicle_tree, ctrl_obj.select_all("Vehicles", True)))
+    return
+
+def build_view_tool_frame(tool_frame):
+    global ctrl_obj
+
+    # Create the Treeview widget with columns
+    tool_tree = ttk.Treeview(tool_frame, columns=("id", "name", "capacity", "ttid"), show="headings")
+
+    # Define column headings
+    tool_tree.heading("id", text="Tool ID")
+    tool_tree.heading("name", text="Name")
+    tool_tree.heading("capacity", text="Power Capacity")
+    tool_tree.heading("ttid", text="Traveler ID")
+
+    # Get data from database to display
+    tool_array = ctrl_obj.select_all("Tools", True)
+
+    # Populate the Treeview with data from the array
+    populate_treeview(tool_tree, tool_array)
+
+    # Arrange the tree within the frame
+    tool_tree.pack(fill="both", expand=True)
+
+    # Dynamically update on cursor hover
+    tool_tree.bind("<Enter>", lambda event: populate_treeview(tool_tree, ctrl_obj.select_all("Tools", True)))
+    return
+
+def populate_treeview(tree, data):
+    # Clear the treeview list items
+    for item in tree.get_children():
+        tree.delete(item)
+
+    # Insert updated data
+    for item in data:
+        tree.insert('', 'end', values=item)
+
 # Main builds/arranges all basic UI elements and tells tkinter to run the program.
 def main():
     # Get our reference to the controller
@@ -336,23 +493,16 @@ def main():
     root_notebook = ttk.Notebook(root)
 
     # Define the notebook's views.
-    # First page (Adding).
     add_view = ttk.Frame(root_notebook)   
-
-    # Widgets/elements for the first page.
-    insert_views = build_add_view(add_view)
-    insert_views.pack(fill="both", expand=True)
-
-    # Second page (Editing).
     edit_view = ttk.Frame(root_notebook)  
-
-    # Widgets/elements for the second page.
-
-    # Third page (viewing).
     database_view = ttk.Frame(root_notebook)
-
-    # Fourth page (exporting/reports).
     export_view = ttk.Frame(root_notebook)
+
+    # Build the subframes for each view, and insert
+    add_view_frames = build_add_view(add_view)
+    add_view_frames.pack(fill="both", expand=True)
+    database_view_frames = build_database_view(database_view)
+    database_view_frames.pack(fill="both", expand=True)
 
     # Add pages to the notebook.
     root_notebook.add(add_view, text='Add')
