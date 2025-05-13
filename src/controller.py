@@ -11,6 +11,13 @@ class controller:
         self.db_ops = db_operations()
         return
     
+    def insert_trip(self, location, image, travelerID):
+        query = '''INSERT INTO Trip (location, image, travelerID)
+VALUES (%s, %s, %s)'''
+
+        self.db_ops.modify_query_params(query, (location, image, travelerID))
+        return
+    
     def insert_traveler(self, name, age, location):
         query = '''INSERT INTO Traveler (name, age, birthLocation)
 VALUES (%s, %s, %s)'''

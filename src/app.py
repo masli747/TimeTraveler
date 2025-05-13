@@ -38,11 +38,8 @@ def build_add_view(parent):
     add_vehicle_view = ttk.Frame(insert_notebook)
     add_tool_view = ttk.Frame(insert_notebook)
 
-    # FIXME: Remove later!
-    test = Label(add_trip_view, text="Inserting Trips")    
-    test.pack()
-
     # Build each frame's widgets
+    build_add_trip_frame(add_trip_view)
     build_add_traveler_frame(add_traveler_view)
     build_add_companion_frame(add_companion_view)
     build_add_vehicle_frame(add_vehicle_view)
@@ -57,9 +54,42 @@ def build_add_view(parent):
 
     return insert_notebook
 
+def build_add_trip_frame(add_trip_view):
+    # Labels for all trip attributes
+    location_label = ttk.Label(add_trip_view, text="Location:")
+    image_label = ttk.Label(add_trip_view, text="Image File:")
+    traveler_lable = ttk.Label(add_trip_view, text="Traveler:")
+    location_label.grid(row = 0, column = 0, sticky = W, padx = 4, pady = 2)
+    image_label.grid(row = 1, column = 0, sticky = W, padx = 4, pady = 2)
+    traveler_lable.grid(row = 2, column = 0, sticky = W, padx = 2, pady = 2)
+
+    # Strings and Entry widgets for all Companion Attributes
+    location_string = StringVar()
+    image_string = StringVar()
+    valid_travelers = ctrl_obj.select_all("Travelers", False)
+    location_entry = ttk.Entry(add_trip_view, textvariable=location_string)
+    image_entry = ttk.Entry(add_trip_view, textvariable=image_string)
+    traveler_combo = ttk.Combobox(add_trip_view, values=valid_travelers, state="readonly")
+    location_entry.grid(row = 0, column = 1, pady = 2)
+    image_entry.grid(row = 1, column = 1, pady = 2)
+    traveler_combo.grid(row = 2, column = 1, pady = 2)
+
+    # Update the list of valid travelers whenever the user mouses over the combo
+    # Makes sure recently added travelers are avaliable to choose.
+    traveler_combo.bind("<Enter>", lambda event: update_companion_travelers(event, traveler_combo))
+
+    # Button to submit all attributes to controller for insertion.
+    submission_button = Button(add_trip_view, text="Add", command=lambda: submit_companion(
+        location_string.get(), 
+        image_string.get(), 
+        traveler_combo.get()))
+    submission_button.grid(row = 3, column = 2, sticky = S, padx = 2, pady = 2)
+
+    return
+
 def build_add_traveler_frame(add_traveler_view):
     # Labels for all traveler Attributes
-    name_label = Label(add_traveler_view, text="Name:")
+    name_label = ttk.Label(add_traveler_view, text="Name:")
     age_lable = Label(add_traveler_view, text="Age:")
     location_lable = Label(add_traveler_view, text="Original Location:")
     name_label.grid(row = 0, column = 0, sticky = W, padx = 4, pady = 2)
@@ -198,6 +228,35 @@ def update_companion_travelers(event, combo):
     # Use config to update the set of acceptable travelers.
     combo.config(values=ctrl_obj.select_all("Travelers", False))
     return
+
+def submit_trip(location, image, traveler):
+    # Make sure the user wants to insert a trip.
+    insert = add_confirmation("Trip")
+    
+    # Break out early if not returning
+    if not insert:
+        return
+    
+    # Check user input for errors
+    try:
+        temp = traveler[0]
+        if location == "" or image == "": 
+            raise ValueError
+        # print(name, age, location, traveler[0] if traveler[0] != None else "")
+    except IndexError:
+        messagebox.showinfo(message='Error: Selected traveler is invalid!')
+        return
+    except:
+        messagebox.showinfo(message='Error: Entered trip values are incorrect!')
+        return
+
+    # if user wants to insert, add the trip into our db using controller.
+    if insert:
+        ctrl_obj.insert_trip(location, image, traveler[0])
+        messagebox.showinfo(message='Trip added!')
+        return
+    else:
+        return
 
 def submit_traveler(name, age, location):
     # Make sure the user wants to insert a companion.
