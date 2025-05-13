@@ -12,7 +12,7 @@ class controller:
         return
     
     def insert_trip(self, location, image, travelerID):
-        query = '''INSERT INTO Trip (location, image, travelerID)
+        query = '''INSERT INTO Trip (location, imageFile, travelerID)
 VALUES (%s, %s, %s)'''
 
         self.db_ops.modify_query_params(query, (location, image, travelerID))

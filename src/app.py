@@ -79,7 +79,7 @@ def build_add_trip_frame(add_trip_view):
     traveler_combo.bind("<Enter>", lambda event: update_companion_travelers(event, traveler_combo))
 
     # Button to submit all attributes to controller for insertion.
-    submission_button = Button(add_trip_view, text="Add", command=lambda: submit_companion(
+    submission_button = Button(add_trip_view, text="Add", command=lambda: submit_trip(
         location_string.get(), 
         image_string.get(), 
         traveler_combo.get()))
