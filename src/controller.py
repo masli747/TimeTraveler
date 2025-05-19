@@ -81,6 +81,16 @@ VALUES (%s, %s, %s)'''
 
         return self.db_ops.select_query(query)
     
+    def get_column_names(self, table):
+        query = f'''SELECT * FROM {table}'''
+
+        return self.db_ops.return_column_names(query)
+    
+    def generate_report(self):
+        query = '''SELECT * FROM v_master_records;'''
+
+        return self.db_ops.select_query(query)
+
     def destructor(self):
         self.db_ops.destructor()
         return

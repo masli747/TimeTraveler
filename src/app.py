@@ -7,7 +7,8 @@
 # Library imports
 from tkinter import *
 from tkinter import ttk
-from tkinter import messagebox
+from tkinter import messagebox, filedialog
+import pandas as pd
 
 # Local DB imports
 from controller import controller
@@ -538,6 +539,54 @@ def populate_treeview(tree, data):
     for item in data:
         tree.insert('', 'end', values=item)
 
+def build_export_view(parent):
+    global ctrl_obj
+
+    # Base Frame Object
+    export_frame = ttk.Frame(parent)
+
+    # Label Widgets
+    export_header = ttk.Label(export_frame, text="Time Traveler's Database Report:")
+
+    # Frame all items
+    export_header.grid(row = 0, column = 0, pady = 2)
+
+    # Button to send request to download Excel sheet..
+    submission_button = Button(export_frame, text="Generate Database Report", command=lambda: generate_database_report())
+    submission_button.grid(row = 0, column = 2, sticky = S, padx = 2, pady = 2)
+
+    return export_frame
+
+def generate_database_report():
+    global ctrl_obj
+
+    # Ask if user wants to save a report.
+    generate_confirmation = export_confirmation()
+
+    if generate_confirmation:
+        # If they do, get components needed for a report from the DB.
+        report_array = ctrl_obj.generate_report()
+        columns = ctrl_obj.get_column_names("v_master_records")
+
+        # Ask the user where they want to save their report to.
+        file_path = filedialog.asksaveasfile(mode='w', defaultextension=".csv")
+        
+        # If user bails on saving, abort serializing the repot.
+        if file_path is None:
+            return
+
+        # Write the report to the intended file path.
+        report_df = pd.DataFrame(report_array, columns=columns)
+        report_df.to_csv(file_path.name, index=False)
+        file_path.close()
+
+    return
+
+def export_confirmation():
+    return messagebox.askyesno(message=f'Are you sure you want to generate a report of the database?',
+                                 icon='question',
+                                 title='Generate Report?')
+
 # Main builds/arranges all basic UI elements and tells tkinter to run the program.
 def main():
     # Get our reference to the controller
@@ -559,9 +608,11 @@ def main():
 
     # Build the subframes for each view, and insert
     add_view_frames = build_add_view(add_view)
-    add_view_frames.pack(fill="both", expand=True)
     database_view_frames = build_database_view(database_view)
+    export_view_frames = build_export_view(export_view)
+    add_view_frames.pack(fill="both", expand=True)
     database_view_frames.pack(fill="both", expand=True)
+    export_view_frames.pack(fill="both", expand=True)
 
     # Add pages to the notebook.
     root_notebook.add(add_view, text='Add')
