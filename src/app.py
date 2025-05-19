@@ -376,13 +376,15 @@ def build_database_view(parent):
 
     # Notebook containing subviews that we will return
     view_notebook = ttk.Notebook(parent)
+    table_notebook = ttk.Notebook(view_notebook)
+    aggregate_notebook = ttk.Notebook(view_notebook)
 
     # Frames for viewing entities
-    trip_frame = ttk.Frame(view_notebook)
-    traveler_frame = ttk.Frame(view_notebook)
-    companion_frame = ttk.Frame(view_notebook)
-    vehicle_frame = ttk.Frame(view_notebook)
-    tool_frame = ttk.Frame(view_notebook)
+    trip_frame = ttk.Frame(table_notebook)
+    traveler_frame = ttk.Frame(table_notebook)
+    companion_frame = ttk.Frame(table_notebook)
+    vehicle_frame = ttk.Frame(table_notebook)
+    tool_frame = ttk.Frame(table_notebook)
 
     # Build frame widgets
     build_view_trip_frame(trip_frame)
@@ -392,11 +394,13 @@ def build_database_view(parent):
     build_view_tool_frame(tool_frame)
 
     # Add frames to notebook
-    view_notebook.add(trip_frame, text="Trips")
-    view_notebook.add(traveler_frame, text="Travelers")
-    view_notebook.add(companion_frame, text="Companions")
-    view_notebook.add(vehicle_frame, text="Vehicles")
-    view_notebook.add(tool_frame, text="Tools")
+    table_notebook.add(trip_frame, text="Trips")
+    table_notebook.add(traveler_frame, text="Travelers")
+    table_notebook.add(companion_frame, text="Companions")
+    table_notebook.add(vehicle_frame, text="Vehicles")
+    table_notebook.add(tool_frame, text="Tools")
+    view_notebook.add(table_notebook, text="Table Views")
+    view_notebook.add(aggregate_notebook, text="Aggregation Views")
 
     return view_notebook
 
