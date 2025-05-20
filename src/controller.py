@@ -13,7 +13,8 @@ class controller:
     
     def insert_trip(self, location, image, travelerID):
         query = '''INSERT INTO Trip (location, imageFile, travelerID)
-VALUES (%s, %s, %s)'''
+VALUES (%s, %s, %s);''' 
+        # COMMIT; isn't necessary since it's added by cursor.commit() in the db_operations file.
 
         self.db_ops.modify_query_params(query, (location, image, travelerID))
         return
@@ -80,6 +81,23 @@ VALUES (%s, %s, %s)'''
         query = f'''SELECT {attributes} FROM {target_table};'''
 
         return self.db_ops.select_query(query)
+    
+    def get_count(self, table, attribute):
+        query = '''SELECT COUNT(%s) AS result
+FROM %s'''
+
+        return self.db_ops.select_query_params(query, (attribute, table))
+
+    def get_average(self, table, attribute, group):
+        query = '''SELECT AVG(%s) AS result
+FROM %s'''
+
+        if group != None:
+            query += '''\nGROUP BY %s;'''
+            return self.db_ops.select_query_params(query, (attribute, table, group))
+        else:
+            query += ''';'''
+            return self.db_ops.select_query_params(query, (attribute, table))
     
     def get_column_names(self, table):
         query = f'''SELECT * FROM {table}'''
