@@ -83,22 +83,34 @@ VALUES (%s, %s, %s)'''
         return self.db_ops.select_query(query)
     
     def get_count(self, table, attribute):
-        query = '''SELECT COUNT(%s) AS result
-FROM %s'''
+        query = f'''SELECT COUNT({attribute}) AS result
+FROM {table}'''
 
-        return self.db_ops.select_query_params(query, (attribute, table))
+        return self.db_ops.select_query(query)
 
     def get_average(self, table, attribute, group):
-        query = '''SELECT AVG(%s) AS result
-FROM %s'''
+        query = f'''SELECT AVG({attribute}) AS result
+FROM {table}'''
 
         if group != None:
-            query += '''\nGROUP BY %s;'''
-            return self.db_ops.select_query_params(query, (attribute, table, group))
+            query += f'''\nGROUP BY {group};'''
+            return self.db_ops.select_query(query)
         else:
             query += ''';'''
-            return self.db_ops.select_query_params(query, (attribute, table))
+            return self.db_ops.select_query(query)
     
+    def get_average_trips(self, type):
+        # Python f-string because connector %s substitution doesn't work with subqueries.
+        query = f'''SELECT AVG(trip_count) AS average_number_trips
+FROM
+    (
+        SELECT COUNT(*) AS trip_count
+        FROM v_master_records
+        GROUP BY {type}
+    ) AS trips;'''
+        
+        return self.db_ops.select_query(query)
+
     def get_column_names(self, table):
         query = f'''SELECT * FROM {table}'''
 

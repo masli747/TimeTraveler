@@ -379,6 +379,7 @@ def build_database_view(parent):
     table_notebook = ttk.Notebook(view_notebook)
     aggregate_notebook = ttk.Notebook(view_notebook)
 
+    # Build the view notebook.
     # Frames for viewing entities
     trip_frame = ttk.Frame(table_notebook)
     traveler_frame = ttk.Frame(table_notebook)
@@ -399,6 +400,16 @@ def build_database_view(parent):
     table_notebook.add(companion_frame, text="Companions")
     table_notebook.add(vehicle_frame, text="Vehicles")
     table_notebook.add(tool_frame, text="Tools")
+
+    # Build the aggregation notebook
+    # The frame
+    aggregation_frame = ttk.Frame(aggregate_notebook)
+    aggregation_frame.pack(fill="both", expand=True)
+
+    # Populate the frame
+    build_view_aggregation_frame(aggregation_frame)
+
+    # Add all types of notebooks to the parent notebook.
     view_notebook.add(table_notebook, text="Table Views")
     view_notebook.add(aggregate_notebook, text="Aggregation Views")
 
@@ -542,6 +553,64 @@ def populate_treeview(tree, data):
     # Insert updated data
     for item in data:
         tree.insert('', 'end', values=item)
+
+def build_view_aggregation_frame(aggregation_frame):
+    global ctrl_obj
+
+    # Data from Database
+    total_travlers = ctrl_obj.get_count("Traveler", "*")
+    total_companions = ctrl_obj.get_count("Companion", "*")
+    total_trips = ctrl_obj.get_count("Trip", "*")
+    total_tools = ctrl_obj.get_count("Tool", "*")
+    total_vehicles = ctrl_obj.get_count("Vehicle", "*")
+    average_trips_per_traveler = ctrl_obj.get_average_trips("travelerID")
+    average_trips_per_companion = ctrl_obj.get_average_trips("companionID")
+    average_tool_power = ctrl_obj.get_average("Tool", "powerCapacity", None)
+    average_vehicle_power = ctrl_obj.get_average("Vehicle", "powerCapacity", None)
+
+    # Label Objects
+    total_travelers_label = ttk.Label(aggregation_frame, text="Total Travelers:")
+    total_companions_label = ttk.Label(aggregation_frame, text="Total Companions:")
+    total_trips_label = ttk.Label(aggregation_frame, text="Total Trips:")
+    total_tools_label = ttk.Label(aggregation_frame, text="Total Tools:")
+    total_vehicles_label = ttk.Label(aggregation_frame, text="Total Vehicles:")
+    average_trips_traveler_label = ttk.Label(aggregation_frame, text="Average Trips per Traveler:")
+    average_trips_companion_label = ttk.Label(aggregation_frame, text="Average Trips per Companion:")
+    average_tool_power_label = ttk.Label(aggregation_frame, text="Average Tool Power:")
+    average_vehicle_power_label = ttk.Label(aggregation_frame, text="Average Vehicle Power:")
+
+    total_travelers_amt = ttk.Label(aggregation_frame, text=total_travlers)
+    total_companions_amt = ttk.Label(aggregation_frame, text=total_companions)
+    total_trip_amt = ttk.Label(aggregation_frame, text=total_trips)
+    total_tool_amt = ttk.Label(aggregation_frame, text=total_tools)
+    total_vehicle_amt = ttk.Label(aggregation_frame, text=total_vehicles)
+    trip_traveler_avg = ttk.Label(aggregation_frame, text=average_trips_per_traveler)
+    trip_companion_avg = ttk.Label(aggregation_frame, text=average_trips_per_companion)
+    tool_power_avg = ttk.Label(aggregation_frame, text=average_tool_power)
+    vehicle_power_avg = ttk.Label(aggregation_frame, text=average_vehicle_power)
+
+    # Arrage Labels
+    total_travelers_label.grid(row = 0, column=0, pady = 0, sticky="E")
+    total_companions_label.grid(row = 1, column=0, pady = 0, sticky="E")
+    total_trips_label.grid(row = 2, column=0, pady = 0, sticky="E")
+    total_tools_label.grid(row = 3, column=0, pady = 0, sticky="E")
+    total_vehicles_label.grid(row = 4, column=0, pady = 0, sticky="E")
+    average_trips_traveler_label.grid(row = 5, column=0, pady = 0, sticky="E")
+    average_trips_companion_label.grid(row = 6, column=0, pady = 0, sticky="E")
+    average_tool_power_label.grid(row = 7, column=0, pady = 0, sticky="E")
+    average_vehicle_power_label.grid(row = 8, column=0, pady = 0, sticky="E")
+
+    total_travelers_amt.grid(row = 0, column = 1, pady = 0, sticky="W")
+    total_companions_amt.grid(row = 1, column = 1, pady = 0, sticky="W")
+    total_trip_amt.grid(row = 2, column = 1, pady = 0, sticky="W")
+    total_tool_amt.grid(row = 3, column = 1, pady = 0, sticky="W")
+    total_vehicle_amt.grid(row = 4, column = 1, pady = 0, sticky="W")
+    trip_traveler_avg.grid(row = 5, column = 1, pady = 0, sticky="W")
+    trip_companion_avg.grid(row = 6, column = 1, pady = 0, sticky="W")
+    tool_power_avg.grid(row = 7, column = 1, pady = 0, sticky="W")
+    vehicle_power_avg.grid(row = 8, column = 1, pady = 0, sticky="W")
+
+    return
 
 def build_export_view(parent):
     global ctrl_obj
