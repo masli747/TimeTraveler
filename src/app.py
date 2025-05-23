@@ -80,7 +80,7 @@ def build_add_trip_frame(add_trip_view):
     traveler_combo.bind("<Enter>", lambda event: update_companion_travelers(event, traveler_combo))
 
     # Button to submit all attributes to controller for insertion.
-    submission_button = Button(add_trip_view, text="Add", command=lambda: submit_trip(
+    submission_button = ttk.Button(add_trip_view, text="Add", command=lambda: submit_trip(
         location_string.get(), 
         image_string.get(), 
         traveler_combo.get()))
@@ -91,8 +91,8 @@ def build_add_trip_frame(add_trip_view):
 def build_add_traveler_frame(add_traveler_view):
     # Labels for all traveler Attributes
     name_label = ttk.Label(add_traveler_view, text="Name:")
-    age_lable = Label(add_traveler_view, text="Age:")
-    location_lable = Label(add_traveler_view, text="Original Location:")
+    age_lable = ttk.Label(add_traveler_view, text="Age:")
+    location_lable = ttk.Label(add_traveler_view, text="Original Location:")
     name_label.grid(row = 0, column = 0, sticky = W, padx = 4, pady = 2)
     age_lable.grid(row = 1, column = 0, sticky = W, padx = 4, pady = 2)
     location_lable.grid(row = 2, column = 0, sticky = W, padx = 4, pady = 2)
@@ -101,15 +101,15 @@ def build_add_traveler_frame(add_traveler_view):
     name_string = StringVar()
     age_string = StringVar()
     location_string = StringVar()
-    name_entry = Entry(add_traveler_view, textvariable=name_string)
-    age_entry = Entry(add_traveler_view, textvariable=age_string)
-    location_entry = Entry(add_traveler_view, textvariable=location_string)
+    name_entry = ttk.Entry(add_traveler_view, textvariable=name_string)
+    age_entry = ttk.Entry(add_traveler_view, textvariable=age_string)
+    location_entry = ttk.Entry(add_traveler_view, textvariable=location_string)
     name_entry.grid(row = 0, column = 1, pady = 2)
     age_entry.grid(row = 1, column = 1, pady = 2)
     location_entry.grid(row = 2, column = 1, pady = 2)
 
     # Button to submit all attributes to controller for insertion.
-    submission_button = Button(add_traveler_view, text="Add", command=lambda: submit_traveler(
+    submission_button = ttk.Button(add_traveler_view, text="Add", command=lambda: submit_traveler(
         name_string.get(), 
         age_string.get(), 
         location_string.get()))
@@ -119,10 +119,10 @@ def build_add_traveler_frame(add_traveler_view):
 
 def build_add_companion_frame(add_companion_view):
     # Labels for all Companion Attributes
-    name_label = Label(add_companion_view, text="Name:")
-    age_lable = Label(add_companion_view, text="Age:")
-    location_lable = Label(add_companion_view, text="Original Location:")
-    traveler_lable = Label(add_companion_view, text="Travels With:")
+    name_label = ttk.Label(add_companion_view, text="Name:")
+    age_lable = ttk.Label(add_companion_view, text="Age:")
+    location_lable = ttk.Label(add_companion_view, text="Original Location:")
+    traveler_lable = ttk.Label(add_companion_view, text="Travels With:")
     name_label.grid(row = 0, column = 0, sticky = W, padx = 2, pady = 2)
     age_lable.grid(row = 1, column = 0, sticky = W, padx = 2, pady = 2)
     location_lable.grid(row = 2, column = 0, sticky = W, padx = 2, pady = 2)
@@ -133,9 +133,9 @@ def build_add_companion_frame(add_companion_view):
     age_string = StringVar()
     location_string = StringVar()
     valid_travelers = ctrl_obj.select_all("Travelers", False)
-    name_entry = Entry(add_companion_view, textvariable=name_string)
-    age_entry = Entry(add_companion_view, textvariable=age_string)
-    location_entry = Entry(add_companion_view, textvariable=location_string)
+    name_entry = ttk.Entry(add_companion_view, textvariable=name_string)
+    age_entry = ttk.Entry(add_companion_view, textvariable=age_string)
+    location_entry = ttk.Entry(add_companion_view, textvariable=location_string)
     traveler_combo = ttk.Combobox(add_companion_view, values=valid_travelers, state="readonly")
     name_entry.grid(row = 0, column = 1, pady = 2)
     age_entry.grid(row = 1, column = 1, pady = 2)
@@ -147,7 +147,7 @@ def build_add_companion_frame(add_companion_view):
     traveler_combo.bind("<Enter>", lambda event: update_companion_travelers(event, traveler_combo))
     
     # Button to submit all attributes to controller for insertion.
-    submission_button = Button(add_companion_view, text="Add", command=lambda: submit_companion(
+    submission_button = ttk.Button(add_companion_view, text="Add", command=lambda: submit_companion(
         name_string.get(), 
         age_string.get(), 
         location_string.get(), 
@@ -157,10 +157,10 @@ def build_add_companion_frame(add_companion_view):
 
 def build_add_vehicle_frame(add_vehicle_view):
     # Labels for all Vehicle Attributes
-    name_label = Label(add_vehicle_view, text="Name:")
-    age_lable = Label(add_vehicle_view, text="Power Capacity:")
-    location_lable = Label(add_vehicle_view, text="Engine:")
-    traveler_lable = Label(add_vehicle_view, text="Piloted By:")
+    name_label = ttk.Label(add_vehicle_view, text="Name:")
+    age_lable = ttk.Label(add_vehicle_view, text="Power Capacity:")
+    location_lable = ttk.Label(add_vehicle_view, text="Engine:")
+    traveler_lable = ttk.Label(add_vehicle_view, text="Piloted By:")
     name_label.grid(row = 0, column = 0, sticky = W, padx = 2, pady = 2)
     age_lable.grid(row = 1, column = 0, sticky = W, padx = 2, pady = 2)
     location_lable.grid(row = 2, column = 0, sticky = W, padx = 2, pady = 2)
@@ -171,9 +171,9 @@ def build_add_vehicle_frame(add_vehicle_view):
     power_string = StringVar()
     engine_string = StringVar()
     valid_travelers = ctrl_obj.select_all("Travelers", False)
-    name_entry = Entry(add_vehicle_view, textvariable=name_string)
-    power_entry = Entry(add_vehicle_view, textvariable=power_string)
-    engine_entry = Entry(add_vehicle_view, textvariable=engine_string)
+    name_entry = ttk.Entry(add_vehicle_view, textvariable=name_string)
+    power_entry = ttk.Entry(add_vehicle_view, textvariable=power_string)
+    engine_entry = ttk.Entry(add_vehicle_view, textvariable=engine_string)
     traveler_combo = ttk.Combobox(add_vehicle_view, values=valid_travelers, state="readonly")
     name_entry.grid(row = 0, column = 1, pady = 2)
     power_entry.grid(row = 1, column = 1, pady = 2)
@@ -185,7 +185,7 @@ def build_add_vehicle_frame(add_vehicle_view):
     traveler_combo.bind("<Enter>", lambda event: update_companion_travelers(event, traveler_combo))
 
     # Button to submit all attributes to controller for insertion.
-    submission_button = Button(add_vehicle_view, text="Add", command=lambda: submit_vehicle(
+    submission_button = ttk.Button(add_vehicle_view, text="Add", command=lambda: submit_vehicle(
         name_string.get(), 
         power_string.get(), 
         engine_string.get(), 
@@ -195,9 +195,9 @@ def build_add_vehicle_frame(add_vehicle_view):
 
 def build_add_tool_frame(add_tool_view):
     # Labels for all Tool Attributes
-    name_label = Label(add_tool_view, text="Name:")
-    age_lable = Label(add_tool_view, text="Power Capacity:")
-    traveler_lable = Label(add_tool_view, text="Utilized By:")
+    name_label = ttk.Label(add_tool_view, text="Name:")
+    age_lable = ttk.Label(add_tool_view, text="Power Capacity:")
+    traveler_lable = ttk.Label(add_tool_view, text="Utilized By:")
     name_label.grid(row = 0, column = 0, sticky = W, padx = 2, pady = 2)
     age_lable.grid(row = 1, column = 0, sticky = W, padx = 2, pady = 2)
     traveler_lable.grid(row = 2, column = 0, sticky = W, padx = 2, pady = 2)
@@ -206,8 +206,8 @@ def build_add_tool_frame(add_tool_view):
     name_string = StringVar()
     power_string = StringVar()
     valid_travelers = ctrl_obj.select_all("Travelers", False)
-    name_entry = Entry(add_tool_view, textvariable=name_string)
-    power_entry = Entry(add_tool_view, textvariable=power_string)
+    name_entry = ttk.Entry(add_tool_view, textvariable=name_string)
+    power_entry = ttk.Entry(add_tool_view, textvariable=power_string)
     traveler_combo = ttk.Combobox(add_tool_view, values=valid_travelers, state="readonly")
     name_entry.grid(row = 0, column = 1, pady = 2)
     power_entry.grid(row = 1, column = 1, pady = 2)
@@ -394,9 +394,11 @@ def build_edit_view(parent):
 
     # Build frame widgets
     build_edit_trip_frame(edit_trip_frame)
+    build_edit_traveler_frame(edit_traveler_frame)
 
     # Add frames to notebook
     edit_root_notebook.add(edit_trip_frame, text="Trip")
+    edit_root_notebook.add(edit_traveler_frame, text="Traveler")
 
     return edit_root_notebook
 
@@ -432,6 +434,38 @@ def build_edit_trip_frame(edit_trip_frame):
     edit_button = ttk.Button(edit_trip_frame, text='Edit Item', command=lambda: edit_item(trip_tree, "Trip", edit_trip_frame))
     edit_button.pack(side="right")
 
+def build_edit_traveler_frame(edit_trip_frame):
+    global ctrl_obj
+
+   # Create the Treeview widget with columns
+    traveler_tree = ttk.Treeview(edit_trip_frame, columns=("id", "Name", "Age", "birthLocation", "time"), show="headings")
+
+    # Define column headings
+    traveler_tree.heading("id", text="Traveler ID")
+    traveler_tree.heading("Name", text="Name")
+    traveler_tree.heading("Age", text="Age")
+    traveler_tree.heading("birthLocation", text="Birth Location")
+    traveler_tree.heading("time", text="Current Time Period")
+
+    # Get data from database to display
+    traveler_array = ctrl_obj.select_all("Travelers", True)
+
+    # Populate the Treeview with data from the array
+    populate_treeview(traveler_tree, traveler_array)
+
+    # Arrange the tree within the frame
+    traveler_tree.pack(fill="both", expand=True)
+
+    # Dynamically update on cursor hover
+    traveler_tree.bind("<Enter>", lambda event: populate_treeview(traveler_tree, ctrl_obj.select_all("Travelers", True)))
+
+    # Edit and Delete buttons
+    delete_button = ttk.Button(edit_trip_frame, text='Delete Item', command=lambda: drop_item(traveler_tree, "Traveler"))
+    delete_button.pack(side="left")
+
+    edit_button = ttk.Button(edit_trip_frame, text='Edit Item', command=lambda: edit_item(traveler_tree, "Traveler", edit_trip_frame))
+    edit_button.pack(side="right")
+
 def edit_trip_window(tuple, table, parent):
     trip_window = Toplevel(parent)
     trip_window.title("Edit Trip")
@@ -443,12 +477,12 @@ def edit_trip_window(tuple, table, parent):
     image_string.set(tuple[3])
     valid_travelers = ctrl_obj.select_all("Travelers", False)
 
-    Label(trip_window, text="Location:").grid(row = 0, column = 0, sticky = E, padx = 2, pady = 2)
-    Label(trip_window, text="Image File:").grid(row = 1, column = 0, sticky = E, padx = 2, pady = 2)
-    Label(trip_window, text="Traveler ID:").grid(row = 2, column = 0, sticky = E, padx = 2, pady = 2)
+    ttk.Label(trip_window, text="Location:").grid(row = 0, column = 0, sticky = E, padx = 2, pady = 2)
+    ttk.Label(trip_window, text="Image File:").grid(row = 1, column = 0, sticky = E, padx = 2, pady = 2)
+    ttk.Label(trip_window, text="Traveler ID:").grid(row = 2, column = 0, sticky = E, padx = 2, pady = 2)
 
-    Entry(trip_window, textvariable=location_string).grid(row = 0, column = 1, sticky = W, padx = 2, pady = 2)
-    Entry(trip_window, textvariable=image_string).grid(row = 1, column = 1, sticky = W, padx = 2, pady = 2)
+    ttk.Entry(trip_window, textvariable=location_string).grid(row = 0, column = 1, sticky = W, padx = 2, pady = 2)
+    ttk.Entry(trip_window, textvariable=image_string).grid(row = 1, column = 1, sticky = W, padx = 2, pady = 2)
     traveler_combo = ttk.Combobox(trip_window, values=valid_travelers, state="readonly")
     traveler_combo.grid(row = 2, column = 1, sticky = W, padx = 2, pady = 2)
 
@@ -457,7 +491,7 @@ def edit_trip_window(tuple, table, parent):
     traveler_combo.bind("<Enter>", lambda event: update_companion_travelers(event, traveler_combo))
 
     # Button to submit all attributes to controller for update.
-    submission_button = Button(trip_window, text="Update", command=lambda: update_tuple(
+    submission_button = ttk.Button(trip_window, text="Update", command=lambda: update_tuple(
         "Trip",
         (   
             tuple[0],
