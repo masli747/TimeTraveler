@@ -732,7 +732,9 @@ def build_view_aggregation_frame(aggregation_frame):
     average_trips_per_traveler = ctrl_obj.get_average_trips("travelerID")
     average_trips_per_companion = ctrl_obj.get_average_trips("companionID")
     average_tool_power = ctrl_obj.get_average("Tool", "powerCapacity", None)
+    average_tool_power_after_trip = ctrl_obj.get_average_power_after_trip("Tool")
     average_vehicle_power = ctrl_obj.get_average("Vehicle", "powerCapacity", None)
+    average_vehicle_power_after_trip = ctrl_obj.get_average_power_after_trip("Vehicle")
 
     # Label Objects
     total_travelers_label = ttk.Label(aggregation_frame, text="Total Travelers:")
@@ -743,7 +745,9 @@ def build_view_aggregation_frame(aggregation_frame):
     average_trips_traveler_label = ttk.Label(aggregation_frame, text="Average Trips per Traveler:")
     average_trips_companion_label = ttk.Label(aggregation_frame, text="Average Trips per Companion:")
     average_tool_power_label = ttk.Label(aggregation_frame, text="Average Tool Power:")
+    average_tool_power_label_after_trip = ttk.Label(aggregation_frame, text="Average Tool Power After Trip:")
     average_vehicle_power_label = ttk.Label(aggregation_frame, text="Average Vehicle Power:")
+    average_vehicle_power_label_after_trip = ttk.Label(aggregation_frame, text="Average Vehicle Power After Trip:")
 
     total_travelers_amt = ttk.Label(aggregation_frame, text=total_travlers)
     total_companions_amt = ttk.Label(aggregation_frame, text=total_companions)
@@ -753,7 +757,9 @@ def build_view_aggregation_frame(aggregation_frame):
     trip_traveler_avg = ttk.Label(aggregation_frame, text=average_trips_per_traveler)
     trip_companion_avg = ttk.Label(aggregation_frame, text=average_trips_per_companion)
     tool_power_avg = ttk.Label(aggregation_frame, text=average_tool_power)
+    tool_power_avg_after_trip = ttk.Label(aggregation_frame, text=average_tool_power_after_trip)
     vehicle_power_avg = ttk.Label(aggregation_frame, text=average_vehicle_power)
+    vehicle_power_avg_after_trip = ttk.Label(aggregation_frame, text=average_vehicle_power_after_trip)
 
     # Arrage Labels
     total_travelers_label.grid(row = 0, column=0, pady = 0, sticky="E")
@@ -764,7 +770,9 @@ def build_view_aggregation_frame(aggregation_frame):
     average_trips_traveler_label.grid(row = 5, column=0, pady = 0, sticky="E")
     average_trips_companion_label.grid(row = 6, column=0, pady = 0, sticky="E")
     average_tool_power_label.grid(row = 7, column=0, pady = 0, sticky="E")
-    average_vehicle_power_label.grid(row = 8, column=0, pady = 0, sticky="E")
+    average_tool_power_label_after_trip.grid(row = 8, column=0, pady = 0, sticky="E")
+    average_vehicle_power_label.grid(row = 9, column=0, pady = 0, sticky="E")
+    average_vehicle_power_label_after_trip.grid(row = 10, column=0, pady = 0, sticky="E")
 
     total_travelers_amt.grid(row = 0, column = 1, pady = 0, sticky="W")
     total_companions_amt.grid(row = 1, column = 1, pady = 0, sticky="W")
@@ -774,7 +782,9 @@ def build_view_aggregation_frame(aggregation_frame):
     trip_traveler_avg.grid(row = 5, column = 1, pady = 0, sticky="W")
     trip_companion_avg.grid(row = 6, column = 1, pady = 0, sticky="W")
     tool_power_avg.grid(row = 7, column = 1, pady = 0, sticky="W")
-    vehicle_power_avg.grid(row = 8, column = 1, pady = 0, sticky="W")
+    tool_power_avg_after_trip.grid(row = 8, column=1, pady = 0, sticky="E")
+    vehicle_power_avg.grid(row = 9, column = 1, pady = 0, sticky="W")
+    vehicle_power_avg_after_trip.grid(row = 10, column = 1, pady = 0, sticky="W")
 
     return
 
