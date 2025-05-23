@@ -116,10 +116,73 @@ FROM
 
         return self.db_ops.return_column_names(query)
     
+    def get_average_power_after_trip(self, table):
+        if table == "Tool":
+            query = '''SELECT AVG(Tool.powerCapacity - ToolAbility.powerConsumption)
+FROM Trip
+INNER JOIN Traveler
+ON Trip.travelerID = Traveler.travelerID
+INNER JOIN Tool
+ON Tool.travelerID = Traveler.travelerID
+INNER JOIN ToolAbility
+ON ToolAbility.toolID= Tool.toolID;'''
+        elif table == "Vehicle":
+            query = '''SELECT AVG(Vehicle.powerCapacity - VehicleAbility.powerConsumption)
+FROM Trip
+INNER JOIN Traveler
+ON Trip.travelerID = Traveler.travelerID
+INNER JOIN Vehicle
+ON Vehicle.travelerID = Traveler.travelerID
+INNER JOIN VehicleAbility
+ON VehicleAbility.vehicleID= Vehicle.vehicleID;'''
+        else: 
+            return
+        
+        return self.db_ops.select_query(query)
+    
     def generate_report(self):
         query = '''SELECT * FROM v_master_records;'''
 
         return self.db_ops.select_query(query)
+    
+    def update_tuple(self, key, table, attributes):
+        target_key = ""
+        target_attributes = ()
+
+        if table == "Trip":
+            target_key = "tripID"
+            target_attributes = ("location", "date", "imageFile", "travelerID")
+        elif table == "Traveler":
+            target_key = "travelerID"
+            target_attributes = ("name", "age", "birthLocation", "currentTimePeriod")
+        elif table == "Companion":
+            target_key = "companionID"
+            target_attributes = ("name", "age", "originalLocation", "currentTimePeriod", "travelerID")
+        elif table == "Vehicle":
+            target_key = "vehicleID"
+            target_attributes = ("name", "powerCapacity", "engine", "travelerID")
+        elif table == "Tool":
+            target_key = "toolID"
+            target_attributes = ("name", "powerCapacity", "travelerID")
+        elif table == "VehicleAbility":
+            target_key = "vehicleAbilityID"
+            target_attributes = ("name", "description", "powerConsumption", "successProbability", "vehicleID")
+        elif table == "ToolAbility":
+            target_key = "toolAbilityID"
+            target_attributes = ("name", "description", "powerConsumption", "successProbability", "toolID")
+        else:
+            return
+        
+        query = f'''UPDATE {table} 
+SET '''
+
+        for index in len(attributes):
+            query += f'''{target_attributes[index]} = {attributes[index]},'''
+
+        # Remove the last comma
+        query = query[:-1]
+
+        query += f'''WHERE {target_key} = {key}'''
 
     def drop_tuple(self, key, table):
         target_key = ""

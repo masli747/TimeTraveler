@@ -430,7 +430,8 @@ def build_edit_trip_frame(edit_trip_frame):
 def edit_item(tree, table):
     global ctrl_obj
 
-    primary_key = get_id(tree)
+    target_tuple = get_tree_row(tree)
+    primary_key = target_tuple[0]
 
     if primary_key == None:
         return
@@ -440,20 +441,21 @@ def edit_item(tree, table):
 def drop_item(tree, table):
     global ctrl_obj
 
-    primary_key = get_id(tree)
+    primary_key = get_tree_row(tree)
+    primary_key = primary_key[0]
 
     if primary_key == None:
         return
     
     ctrl_obj.drop_tuple(primary_key, table)
 
-def get_id(tree):
+def get_tree_row(tree):
     selected_item = tree.selection()
     if selected_item:
         # print("Selected item:", selected_item[0])
         values = tree.item(selected_item[0], 'values')
         # print("Values:", values)
-        return values[0]
+        return values
     else:
         # print("No item selected")
         return None
