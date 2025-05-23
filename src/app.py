@@ -500,8 +500,40 @@ def edit_trip_window(tuple, table, parent):
             traveler_combo.get()[0])))
     submission_button.grid(row = 3, column = 2, sticky = S, padx = 2, pady = 2)    
 
+def edit_traveler_window(tuple, table, parent):
+    traveler_window = Toplevel(parent)
+    traveler_window.title("Edit Trip")
+    traveler_window.geometry("800x600")  
+
+    name_string = StringVar()
+    name_string.set(tuple[1])
+    age_string = StringVar()
+    age_string.set(tuple[2])
+    birthplace_string = StringVar()
+    birthplace_string.set(tuple[3])
+
+    Label(traveler_window, text="Name:").grid(row = 0, column = 0, sticky = E, padx = 2, pady = 2)
+    Label(traveler_window, text="Age:").grid(row = 1, column = 0, sticky = E, padx = 2, pady = 2)
+    Label(traveler_window, text="Birth Location:").grid(row = 2, column = 0, sticky = E, padx = 2, pady = 2)
+
+    Entry(traveler_window, textvariable=name_string).grid(row = 0, column = 1, sticky = W, padx = 2, pady = 2)
+    Entry(traveler_window, textvariable=age_string).grid(row = 1, column = 1, sticky = W, padx = 2, pady = 2)
+    Entry(traveler_window, textvariable=birthplace_string).grid(row = 2, column = 1, sticky = W, padx = 2, pady = 2)
+
+    # Button to submit all attributes to controller for update.
+    submission_button = Button(traveler_window, text="Update", command=lambda: update_tuple(
+        "Traveler",
+        (   
+            tuple[0],
+            f"\'{name_string.get()}\'", 
+            age_string.get(),  
+            f"\'{birthplace_string.get()}\'",
+            f"\'{tuple[4]}\'")))
+    submission_button.grid(row = 3, column = 2, sticky = S, padx = 2, pady = 2)    
+
 def update_tuple(table, tuple):
-    print(tuple)
+    print(tuple) # FIXME: DELETE ME!!!
+
     # Make sure the user wants to insert a trip.
     insert = update_confirmation()
     
@@ -534,7 +566,7 @@ def edit_item(tree, table, parent):
     if table == "Trip":
         edit_trip_window(target_tuple, table, parent)
     elif table == "Traveler":
-        target_key = "travelerID"
+        edit_traveler_window(target_tuple, table, parent)
     elif table == "Companion":
         target_key = "companionID"
     elif table == "Vehicle":
