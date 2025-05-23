@@ -121,6 +121,30 @@ FROM
 
         return self.db_ops.select_query(query)
 
+    def drop_tuple(self, key, table):
+        target_key = ""
+
+        if table == "Trip":
+            target_key = "tripID"
+        elif table == "Traveler":
+            target_key = "travelerID"
+        elif table == "Companion":
+            target_key = "companionID"
+        elif table == "Vehicle":
+            target_key = "vehicleID"
+        elif table == "Tool":
+            target_key = "toolID"
+        elif table == "VehicleAbility":
+            target_key = "vehicleAbilityID"
+        elif table == "ToolAbility":
+            target_key = "toolAbilityID"
+        else:
+            return
+
+        query = f'''DELETE FROM {table} WHERE {target_key} = {key};'''
+
+        self.db_ops.modify_query(query)
+
     def destructor(self):
         self.db_ops.destructor()
         return

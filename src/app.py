@@ -371,6 +371,93 @@ def add_confirmation(message):
                                  icon='question',
                                  title='Add Confirmation')
 
+def build_edit_view(parent):
+    global ctrl_obj
+
+    # Notebook containing subviews for selecting & editing from tables
+    edit_root_notebook = ttk.Notebook(parent)
+
+    # Build each notebook
+    # Frames for containing widgets for accessing, editing, and deleting.
+    edit_trip_frame = ttk.Frame(edit_root_notebook)
+    edit_traveler_frame = ttk.Frame(edit_root_notebook)
+    edit_companion_frame = ttk.Frame(edit_root_notebook)
+    edit_tool_frame = ttk.Frame(edit_root_notebook)
+    edit_vehicle_frame = ttk.Frame(edit_root_notebook)
+    edit_tool_ability_frame = ttk.Frame(edit_root_notebook)
+    edit_vehicle_ability_frame = ttk.Frame(edit_root_notebook)
+
+    # Build frame widgets
+    build_edit_trip_frame(edit_trip_frame)
+
+    # Add frames to notebook
+    edit_root_notebook.add(edit_trip_frame, text="Trip")
+
+    return edit_root_notebook
+
+def build_edit_trip_frame(edit_trip_frame):
+    global ctrl_obj
+
+    # Create the Treeview widget with columns
+    trip_tree = ttk.Treeview(edit_trip_frame, columns=("id", "location", "date", "image", "ttid"), show="headings")
+
+    # Define column headings
+    trip_tree.heading("id", text="Trip ID")
+    trip_tree.heading("location", text="Location")
+    trip_tree.heading("date", text="Date")
+    trip_tree.heading("image", text="Image File")
+    trip_tree.heading("ttid", text="Traveler ID")
+
+    # Get data from database to display
+    trip_array = ctrl_obj.select_all("Trips", True)
+
+    # Populate the Treeview with data from the array
+    populate_treeview(trip_tree, trip_array)
+
+    # Arrange the tree within the frame
+    trip_tree.pack(fill="both", expand=True)
+
+    # Dynamically update on cursor hover
+    trip_tree.bind("<Enter>", lambda event: populate_treeview(trip_tree, ctrl_obj.select_all("Trips", True)))
+
+    # Edit and Delete buttons
+    delete_button = ttk.Button(edit_trip_frame, text='Delete Item', command=lambda: drop_item(trip_tree, "Trip"))
+    delete_button.pack(side="left")
+
+    select_button = ttk.Button(edit_trip_frame, text='Edit Item', command=lambda: edit_item(trip_tree, "Trip"))
+    select_button.pack(side="right")
+
+def edit_item(tree, table):
+    global ctrl_obj
+
+    primary_key = get_id(tree)
+
+    if primary_key == None:
+        return
+    
+    print(primary_key)
+
+def drop_item(tree, table):
+    global ctrl_obj
+
+    primary_key = get_id(tree)
+
+    if primary_key == None:
+        return
+    
+    ctrl_obj.drop_tuple(primary_key, table)
+
+def get_id(tree):
+    selected_item = tree.selection()
+    if selected_item:
+        # print("Selected item:", selected_item[0])
+        values = tree.item(selected_item[0], 'values')
+        # print("Values:", values)
+        return values[0]
+    else:
+        # print("No item selected")
+        return None
+
 def build_database_view(parent):
     global ctrl_obj
 
@@ -681,9 +768,11 @@ def main():
 
     # Build the subframes for each view, and insert
     add_view_frames = build_add_view(add_view)
+    edit_view_frames = build_edit_view(edit_view)
     database_view_frames = build_database_view(database_view)
     export_view_frames = build_export_view(export_view)
     add_view_frames.pack(fill="both", expand=True)
+    edit_view_frames.pack(fill="both", expand=True)
     database_view_frames.pack(fill="both", expand=True)
     export_view_frames.pack(fill="both", expand=True)
 
