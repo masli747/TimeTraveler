@@ -9,10 +9,11 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox, filedialog
 import pandas as pd
+from ttkthemes import *
 
 # Local DB imports
 from controller import controller
-
+from src.constants import constants
 ctrl_obj = None
 
 def init():
@@ -56,7 +57,7 @@ def build_add_view(parent):
     return insert_notebook
 
 def build_add_trip_frame(add_trip_view):
-    # Labels for all trip attributes
+    # ttk.Labels for all trip attributes
     location_label = ttk.Label(add_trip_view, text="Location:")
     image_label = ttk.Label(add_trip_view, text="Image File:")
     traveler_lable = ttk.Label(add_trip_view, text="Traveler:")
@@ -64,7 +65,7 @@ def build_add_trip_frame(add_trip_view):
     image_label.grid(row = 1, column = 0, sticky = W, padx = 4, pady = 2)
     traveler_lable.grid(row = 2, column = 0, sticky = W, padx = 2, pady = 2)
 
-    # Strings and Entry widgets for all Companion Attributes
+    # Strings and ttk.Entry widgets for all Companion Attributes
     location_string = StringVar()
     image_string = StringVar()
     valid_travelers = ctrl_obj.select_all("Travelers", False)
@@ -89,7 +90,7 @@ def build_add_trip_frame(add_trip_view):
     return
 
 def build_add_traveler_frame(add_traveler_view):
-    # Labels for all traveler Attributes
+    # ttk.Labels for all traveler Attributes
     name_label = ttk.Label(add_traveler_view, text="Name:")
     age_lable = ttk.Label(add_traveler_view, text="Age:")
     location_lable = ttk.Label(add_traveler_view, text="Original Location:")
@@ -97,7 +98,7 @@ def build_add_traveler_frame(add_traveler_view):
     age_lable.grid(row = 1, column = 0, sticky = W, padx = 4, pady = 2)
     location_lable.grid(row = 2, column = 0, sticky = W, padx = 4, pady = 2)
 
-    # Strings and Entry widgets for all Companion Attributes
+    # Strings and ttk.Entry widgets for all Companion Attributes
     name_string = StringVar()
     age_string = StringVar()
     location_string = StringVar()
@@ -118,7 +119,7 @@ def build_add_traveler_frame(add_traveler_view):
     return
 
 def build_add_companion_frame(add_companion_view):
-    # Labels for all Companion Attributes
+    # ttk.Labels for all Companion Attributes
     name_label = ttk.Label(add_companion_view, text="Name:")
     age_lable = ttk.Label(add_companion_view, text="Age:")
     location_lable = ttk.Label(add_companion_view, text="Original Location:")
@@ -128,7 +129,7 @@ def build_add_companion_frame(add_companion_view):
     location_lable.grid(row = 2, column = 0, sticky = W, padx = 2, pady = 2)
     traveler_lable.grid(row = 3, column = 0, sticky = W, padx = 2, pady = 2)
     
-    # Strings and Entry widgets for all Companion Attributes
+    # Strings and ttk.Entry widgets for all Companion Attributes
     name_string = StringVar()
     age_string = StringVar()
     location_string = StringVar()
@@ -156,7 +157,7 @@ def build_add_companion_frame(add_companion_view):
     return
 
 def build_add_vehicle_frame(add_vehicle_view):
-    # Labels for all Vehicle Attributes
+    # ttk.Labels for all Vehicle Attributes
     name_label = ttk.Label(add_vehicle_view, text="Name:")
     age_lable = ttk.Label(add_vehicle_view, text="Power Capacity:")
     location_lable = ttk.Label(add_vehicle_view, text="Engine:")
@@ -166,7 +167,7 @@ def build_add_vehicle_frame(add_vehicle_view):
     location_lable.grid(row = 2, column = 0, sticky = W, padx = 2, pady = 2)
     traveler_lable.grid(row = 3, column = 0, sticky = W, padx = 2, pady = 2)
 
-    # Strings and Entry widgets for all Vehicle Attributes
+    # Strings and ttk.Entry widgets for all Vehicle Attributes
     name_string = StringVar()
     power_string = StringVar()
     engine_string = StringVar()
@@ -194,7 +195,7 @@ def build_add_vehicle_frame(add_vehicle_view):
     return
 
 def build_add_tool_frame(add_tool_view):
-    # Labels for all Tool Attributes
+    # ttk.Labels for all Tool Attributes
     name_label = ttk.Label(add_tool_view, text="Name:")
     age_lable = ttk.Label(add_tool_view, text="Power Capacity:")
     traveler_lable = ttk.Label(add_tool_view, text="Utilized By:")
@@ -202,7 +203,7 @@ def build_add_tool_frame(add_tool_view):
     age_lable.grid(row = 1, column = 0, sticky = W, padx = 2, pady = 2)
     traveler_lable.grid(row = 2, column = 0, sticky = W, padx = 2, pady = 2)
 
-    # Strings and Entry widgets for all Vehicle Attributes
+    # Strings and ttk.Entry widgets for all Vehicle Attributes
     name_string = StringVar()
     power_string = StringVar()
     valid_travelers = ctrl_obj.select_all("Travelers", False)
@@ -218,7 +219,7 @@ def build_add_tool_frame(add_tool_view):
     traveler_combo.bind("<Enter>", lambda event: update_companion_travelers(event, traveler_combo))
 
     # Button to submit all attributes to controller for insertion.
-    submission_button = Button(add_tool_view, text="Add", command=lambda: submit_tool(
+    submission_button = ttk.Button(add_tool_view, text="Add", command=lambda: submit_tool(
         name_string.get(), 
         power_string.get(), 
         traveler_combo.get()))
@@ -477,12 +478,12 @@ def edit_trip_window(tuple, table, parent):
     image_string.set(tuple[3])
     valid_travelers = ctrl_obj.select_all("Travelers", False)
 
-    Label(trip_window, text="Location:").grid(row = 0, column = 0, sticky = E, padx = 2, pady = 2)
-    Label(trip_window, text="Image File:").grid(row = 1, column = 0, sticky = E, padx = 2, pady = 2)
-    Label(trip_window, text="Traveler ID:").grid(row = 2, column = 0, sticky = E, padx = 2, pady = 2)
+    ttk.Label(trip_window, text="Location:").grid(row = 0, column = 0, sticky = E, padx = 2, pady = 2)
+    ttk.Label(trip_window, text="Image File:").grid(row = 1, column = 0, sticky = E, padx = 2, pady = 2)
+    ttk.Label(trip_window, text="Traveler ID:").grid(row = 2, column = 0, sticky = E, padx = 2, pady = 2)
 
-    Entry(trip_window, textvariable=location_string).grid(row = 0, column = 1, sticky = W, padx = 2, pady = 2)
-    Entry(trip_window, textvariable=image_string).grid(row = 1, column = 1, sticky = W, padx = 2, pady = 2)
+    ttk.Entry(trip_window, textvariable=location_string).grid(row = 0, column = 1, sticky = W, padx = 2, pady = 2)
+    ttk.Entry(trip_window, textvariable=image_string).grid(row = 1, column = 1, sticky = W, padx = 2, pady = 2)
     traveler_combo = ttk.Combobox(trip_window, values=valid_travelers, state="readonly")
     traveler_combo.grid(row = 2, column = 1, sticky = W, padx = 2, pady = 2)
 
@@ -491,7 +492,7 @@ def edit_trip_window(tuple, table, parent):
     traveler_combo.bind("<Enter>", lambda event: update_companion_travelers(event, traveler_combo))
 
     # Button to submit all attributes to controller for update.
-    submission_button = Button(trip_window, text="Update", command=lambda: update_tuple(
+    submission_button = ttk.Button(trip_window, text="Update", command=lambda: update_tuple(
         "Trip",
         (   
             tuple[0],
@@ -512,16 +513,16 @@ def edit_traveler_window(tuple, table, parent):
     birthplace_string = StringVar()
     birthplace_string.set(tuple[3])
 
-    Label(traveler_window, text="Name:").grid(row = 0, column = 0, sticky = E, padx = 2, pady = 2)
-    Label(traveler_window, text="Age:").grid(row = 1, column = 0, sticky = E, padx = 2, pady = 2)
-    Label(traveler_window, text="Birth Location:").grid(row = 2, column = 0, sticky = E, padx = 2, pady = 2)
+    ttk.Label(traveler_window, text="Name:").grid(row = 0, column = 0, sticky = E, padx = 2, pady = 2)
+    ttk.Label(traveler_window, text="Age:").grid(row = 1, column = 0, sticky = E, padx = 2, pady = 2)
+    ttk.Label(traveler_window, text="Birth Location:").grid(row = 2, column = 0, sticky = E, padx = 2, pady = 2)
 
-    Entry(traveler_window, textvariable=name_string).grid(row = 0, column = 1, sticky = W, padx = 2, pady = 2)
-    Entry(traveler_window, textvariable=age_string).grid(row = 1, column = 1, sticky = W, padx = 2, pady = 2)
-    Entry(traveler_window, textvariable=birthplace_string).grid(row = 2, column = 1, sticky = W, padx = 2, pady = 2)
+    ttk.Entry(traveler_window, textvariable=name_string).grid(row = 0, column = 1, sticky = W, padx = 2, pady = 2)
+    ttk.Entry(traveler_window, textvariable=age_string).grid(row = 1, column = 1, sticky = W, padx = 2, pady = 2)
+    ttk.Entry(traveler_window, textvariable=birthplace_string).grid(row = 2, column = 1, sticky = W, padx = 2, pady = 2)
 
-    # Button to submit all attributes to controller for update.
-    submission_button = Button(traveler_window, text="Update", command=lambda: update_tuple(
+    # ttk.Button to submit all attributes to controller for update.
+    submission_button = ttk.Button(traveler_window, text="Update", command=lambda: update_tuple(
         "Traveler",
         (   
             tuple[0],
@@ -802,7 +803,7 @@ def build_view_aggregation_frame(aggregation_frame):
     average_vehicle_power = ctrl_obj.get_average("Vehicle", "powerCapacity", None)
     average_vehicle_power_after_trip = ctrl_obj.get_average_power_after_trip("Vehicle")
 
-    # Label Objects
+    # ttk.Label Objects
     total_travelers_label = ttk.Label(aggregation_frame, text="Total Travelers:")
     total_companions_label = ttk.Label(aggregation_frame, text="Total Companions:")
     total_trips_label = ttk.Label(aggregation_frame, text="Total Trips:")
@@ -827,7 +828,7 @@ def build_view_aggregation_frame(aggregation_frame):
     vehicle_power_avg = ttk.Label(aggregation_frame, text=average_vehicle_power)
     vehicle_power_avg_after_trip = ttk.Label(aggregation_frame, text=average_vehicle_power_after_trip)
 
-    # Arrage Labels
+    # Arrage ttk.Labels
     total_travelers_label.grid(row = 0, column=0, pady = 0, sticky="E")
     total_companions_label.grid(row = 1, column=0, pady = 0, sticky="E")
     total_trips_label.grid(row = 2, column=0, pady = 0, sticky="E")
@@ -860,13 +861,13 @@ def build_export_view(parent):
     # Base Frame Object
     export_frame = ttk.Frame(parent)
 
-    # Label Widgets
+    # ttk.Label Widgets
     export_header = ttk.Label(export_frame, text="Time Traveler's Database Report:")
 
     # Frame all items
     export_header.grid(row = 0, column = 0, pady = 2)
 
-    # Button to send request to download Excel sheet..
+    # ttk.Button to send request to download Excel sheet..
     submission_button = ttk.Button(export_frame, text="Generate Database Report", command=lambda: generate_database_report())
     submission_button.grid(row = 0, column = 2, sticky = S, padx = 2, pady = 2)
 
@@ -911,6 +912,27 @@ def main():
     root = Tk()
     root.title("The Time Traveler's Database")
     root.geometry("960x720")
+
+    style = ThemedStyle(root)
+    style.set_theme("black")
+    style.configure("TLabel", foreground=constants.GOLD_GALLIFREYAN, background=constants.BLUE_TARDIS)
+    style.configure("TButton", foreground=constants.CHARCOAL_SONIC_SHADOW, background=constants.PINK_COMPANION_ROSE)
+    style.configure("TFrame", background=constants.BLUE_TARDIS)
+    style.configure("TEntry", foreground="green")
+    style.configure("TCombobox", foreground="red")
+    style.configure("TTreeview", foreground="orange")
+    style.configure("Treeview", foreground=constants.SILVER_TIME_MIST, background=constants.PURPLE_NEBULA,
+                    fieldbackground=constants.BLUE_TARDIS)
+    style.configure("Treeview.Heading", foreground="pink", background=constants.BLUE_TARDIS)
+
+    style.configure("TNotebook", background=constants.PURPLE_NEBULA)
+    # Customize notebook tabs
+    style.configure("TNotebook.Tab",
+                    background="#003B6F",  # Unselected tab background (TARDIS Blue)
+                    foreground="white", )  # Unselected tab text
+    style.map("TNotebook.Tab",
+              background=[("selected", constants.GOLD_GALLIFREYAN)],  # Selected tab background (Gallifreyan Gold)
+              foreground=[("selected", "black")])  # Selected tab text
 
     # Make a notebook, so we can switch between views.
     root_notebook = ttk.Notebook(root)
