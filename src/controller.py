@@ -145,13 +145,16 @@ ON VehicleAbility.vehicleID= Vehicle.vehicleID;'''
 
         return self.db_ops.select_query(query)
     
-    def update_tuple(self, key, table, attributes):
+    def update_tuple(self, table, attributes):
+        key = attributes[0]
         target_key = ""
         target_attributes = ()
+        # Slice off they key, since we don't want to update that!
+        attributes = attributes[1:]
 
         if table == "Trip":
             target_key = "tripID"
-            target_attributes = ("location", "date", "imageFile", "travelerID")
+            target_attributes = ("location", "imageFile", "travelerID")
         elif table == "Traveler":
             target_key = "travelerID"
             target_attributes = ("name", "age", "birthLocation", "currentTimePeriod")
@@ -176,13 +179,16 @@ ON VehicleAbility.vehicleID= Vehicle.vehicleID;'''
         query = f'''UPDATE {table} 
 SET '''
 
-        for index in len(attributes):
-            query += f'''{target_attributes[index]} = {attributes[index]},'''
+        for index, item in enumerate(attributes):
+            query += f'''{target_attributes[index]} = {attributes[index]}, '''
 
         # Remove the last comma
-        query = query[:-1]
+        query = query[:-2]
 
-        query += f'''WHERE {target_key} = {key}'''
+        query += f'''\nWHERE {target_key} = {key}'''
+
+        print(query)
+        self.db_ops.modify_query(query)
 
     def drop_tuple(self, key, table):
         target_key = ""
