@@ -371,6 +371,11 @@ def add_confirmation(message):
                                  icon='question',
                                  title='Add Confirmation')
 
+def update_confirmation():
+    return messagebox.askyesno(message=f'Are you sure you want to update this entry?',
+                                 icon='question',
+                                 title='Entry Confirmation')
+
 def build_edit_view(parent):
     global ctrl_obj
 
@@ -424,28 +429,100 @@ def build_edit_trip_frame(edit_trip_frame):
     delete_button = ttk.Button(edit_trip_frame, text='Delete Item', command=lambda: drop_item(trip_tree, "Trip"))
     delete_button.pack(side="left")
 
-    select_button = ttk.Button(edit_trip_frame, text='Edit Item', command=lambda: edit_item(trip_tree, "Trip"))
-    select_button.pack(side="right")
+    edit_button = ttk.Button(edit_trip_frame, text='Edit Item', command=lambda: edit_item(trip_tree, "Trip", edit_trip_frame))
+    edit_button.pack(side="right")
 
-def edit_item(tree, table):
+def edit_trip_window(tuple, table, parent):
+    trip_window = Toplevel(parent)
+    trip_window.title("Edit Trip")
+    trip_window.geometry("800x600")  
+
+    location_string = StringVar()
+    location_string.set(tuple[1])
+    image_string = StringVar()
+    image_string.set(tuple[3])
+    valid_travelers = ctrl_obj.select_all("Travelers", False)
+
+    Label(trip_window, text="Location:").grid(row = 0, column = 0, sticky = E, padx = 2, pady = 2)
+    Label(trip_window, text="Image File:").grid(row = 1, column = 0, sticky = E, padx = 2, pady = 2)
+    Label(trip_window, text="Traveler ID:").grid(row = 2, column = 0, sticky = E, padx = 2, pady = 2)
+
+    Entry(trip_window, textvariable=location_string).grid(row = 0, column = 1, sticky = W, padx = 2, pady = 2)
+    Entry(trip_window, textvariable=image_string).grid(row = 1, column = 1, sticky = W, padx = 2, pady = 2)
+    traveler_combo = ttk.Combobox(trip_window, values=valid_travelers, state="readonly")
+    traveler_combo.grid(row = 2, column = 1, sticky = W, padx = 2, pady = 2)
+
+    # Update the list of valid travelers whenever the user mouses over the combo
+    # Makes sure recently added travelers are avaliable to choose.
+    traveler_combo.bind("<Enter>", lambda event: update_companion_travelers(event, traveler_combo))
+
+    # Button to submit all attributes to controller for update.
+    submission_button = Button(trip_window, text="Update", command=lambda: update_tuple(
+        "Trip",
+        (   
+            tuple[0],
+            f"\'{location_string.get()}\'", 
+            f"\'{image_string.get()}\'",  
+            traveler_combo.get()[0])))
+    submission_button.grid(row = 3, column = 2, sticky = S, padx = 2, pady = 2)    
+
+def update_tuple(table, tuple):
+    print(tuple)
+    # Make sure the user wants to insert a trip.
+    insert = update_confirmation()
+    
+    # Break out early if not returning
+    if not insert:
+        return
+    
+    ctrl_obj.update_tuple(table, tuple)
+    # if user wants to insert, add the trip into our db using controller.
+    if insert:
+        try:
+            # ctrl_obj.update_tuple(table, tuple)
+            messagebox.showinfo(message='Entry Updated!')
+            return
+        except:
+            messagebox.showinfo(message='Error: Inputs Invalid!')
+            return
+    else:
+        return
+    return
+
+def edit_item(tree, table, parent):
     global ctrl_obj
 
     target_tuple = get_tree_row(tree)
-    primary_key = target_tuple[0]
 
-    if primary_key == None:
+    if target_tuple == None:
         return
     
-    print(primary_key)
+    if table == "Trip":
+        edit_trip_window(target_tuple, table, parent)
+    elif table == "Traveler":
+        target_key = "travelerID"
+    elif table == "Companion":
+        target_key = "companionID"
+    elif table == "Vehicle":
+        target_key = "vehicleID"
+    elif table == "Tool":
+        target_key = "toolID"
+    elif table == "VehicleAbility":
+        target_key = "vehicleAbilityID"
+    elif table == "ToolAbility":
+        target_key = "toolAbilityID"
+    else:
+        return
 
 def drop_item(tree, table):
     global ctrl_obj
 
     primary_key = get_tree_row(tree)
-    primary_key = primary_key[0]
 
     if primary_key == None:
         return
+    
+    primary_key = primary_key[0]
     
     ctrl_obj.drop_tuple(primary_key, table)
 
