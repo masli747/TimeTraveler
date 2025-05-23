@@ -835,7 +835,7 @@ def build_export_view(parent):
     export_header.grid(row = 0, column = 0, pady = 2)
 
     # Button to send request to download Excel sheet..
-    submission_button = Button(export_frame, text="Generate Database Report", command=lambda: generate_database_report())
+    submission_button = ttk.Button(export_frame, text="Generate Database Report", command=lambda: generate_database_report())
     submission_button.grid(row = 0, column = 2, sticky = S, padx = 2, pady = 2)
 
     return export_frame
