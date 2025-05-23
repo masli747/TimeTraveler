@@ -477,12 +477,12 @@ def edit_trip_window(tuple, table, parent):
     image_string.set(tuple[3])
     valid_travelers = ctrl_obj.select_all("Travelers", False)
 
-    ttk.Label(trip_window, text="Location:").grid(row = 0, column = 0, sticky = E, padx = 2, pady = 2)
-    ttk.Label(trip_window, text="Image File:").grid(row = 1, column = 0, sticky = E, padx = 2, pady = 2)
-    ttk.Label(trip_window, text="Traveler ID:").grid(row = 2, column = 0, sticky = E, padx = 2, pady = 2)
+    Label(trip_window, text="Location:").grid(row = 0, column = 0, sticky = E, padx = 2, pady = 2)
+    Label(trip_window, text="Image File:").grid(row = 1, column = 0, sticky = E, padx = 2, pady = 2)
+    Label(trip_window, text="Traveler ID:").grid(row = 2, column = 0, sticky = E, padx = 2, pady = 2)
 
-    ttk.Entry(trip_window, textvariable=location_string).grid(row = 0, column = 1, sticky = W, padx = 2, pady = 2)
-    ttk.Entry(trip_window, textvariable=image_string).grid(row = 1, column = 1, sticky = W, padx = 2, pady = 2)
+    Entry(trip_window, textvariable=location_string).grid(row = 0, column = 1, sticky = W, padx = 2, pady = 2)
+    Entry(trip_window, textvariable=image_string).grid(row = 1, column = 1, sticky = W, padx = 2, pady = 2)
     traveler_combo = ttk.Combobox(trip_window, values=valid_travelers, state="readonly")
     traveler_combo.grid(row = 2, column = 1, sticky = W, padx = 2, pady = 2)
 
@@ -491,7 +491,7 @@ def edit_trip_window(tuple, table, parent):
     traveler_combo.bind("<Enter>", lambda event: update_companion_travelers(event, traveler_combo))
 
     # Button to submit all attributes to controller for update.
-    submission_button = ttk.Button(trip_window, text="Update", command=lambda: update_tuple(
+    submission_button = Button(trip_window, text="Update", command=lambda: update_tuple(
         "Trip",
         (   
             tuple[0],
