@@ -29,7 +29,7 @@ class db_operations:
     
     # Load MySQL configuration from configuration file.
     def get_mysql_config(self):
-        with open('src/config.json', 'r') as file:
+        with open('config.json', 'r') as file:
             config = json.load(file)
         return config.get('mysql', {})
     
