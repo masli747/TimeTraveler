@@ -395,10 +395,12 @@ def build_edit_view(parent):
     # Build frame widgets
     build_edit_trip_frame(edit_trip_frame)
     build_edit_traveler_frame(edit_traveler_frame)
+    build_edit_comanion_frame(edit_companion_frame)
 
     # Add frames to notebook
     edit_root_notebook.add(edit_trip_frame, text="Trip")
     edit_root_notebook.add(edit_traveler_frame, text="Traveler")
+    edit_root_notebook.add(edit_companion_frame, text="Companion")
 
     return edit_root_notebook
 
@@ -466,6 +468,39 @@ def build_edit_traveler_frame(edit_trip_frame):
     edit_button = ttk.Button(edit_trip_frame, text='Edit Item', command=lambda: edit_item(traveler_tree, "Traveler", edit_trip_frame))
     edit_button.pack(side="right")
 
+def build_edit_comanion_frame(edit_companion_frame):
+    global ctrl_obj
+
+    # Create the Treeview widget with columns
+    companion_tree = ttk.Treeview(edit_companion_frame, columns=("id", "Name", "Age", "originalLocation", "time", "ttid"), show="headings")
+
+    # Define column headings
+    companion_tree.heading("id", text="Companion ID")
+    companion_tree.heading("Name", text="Name")
+    companion_tree.heading("Age", text="Age")
+    companion_tree.heading("originalLocation", text="Original Location")
+    companion_tree.heading("time", text="Current Time Period")
+    companion_tree.heading("ttid", text="Traveler ID")
+
+    # Get data from database to display
+    companion_array = ctrl_obj.select_all("Companions", True)
+
+    # Populate the Treeview with data from the array
+    populate_treeview(companion_tree, companion_array)
+
+    # Arrange the tree within the frame
+    companion_tree.pack(fill="both", expand=True)
+
+    # Dynamically update on cursor hover
+    companion_tree.bind("<Enter>", lambda event: populate_treeview(companion_tree, ctrl_obj.select_all("Companions", True)))
+
+    # Edit and Delete buttons
+    delete_button = ttk.Button(edit_companion_frame, text='Delete Item', command=lambda: drop_item(companion_tree, "Companion"))
+    delete_button.pack(side="left")
+
+    edit_button = ttk.Button(edit_companion_frame, text='Edit Item', command=lambda: edit_item(companion_tree, "Companion", edit_companion_frame))
+    edit_button.pack(side="right")
+
 def edit_trip_window(tuple, table, parent):
     trip_window = Toplevel(parent)
     trip_window.title("Edit Trip")
@@ -531,6 +566,46 @@ def edit_traveler_window(tuple, table, parent):
             f"\'{tuple[4]}\'")))
     submission_button.grid(row = 3, column = 2, sticky = S, padx = 2, pady = 2)    
 
+def edit_companion_window(tuple, table, parent):
+    companion_window = Toplevel(parent)
+    companion_window.title("Edit Companion")
+    companion_window.geometry("800x600")  
+
+    name_string = StringVar()
+    name_string.set(tuple[1])
+    age_string = StringVar()
+    age_string.set(tuple[2])
+    origin_string = StringVar()
+    origin_string.set(tuple[3])
+    valid_travelers = ctrl_obj.select_all("Travelers", False)
+
+    Label(companion_window, text="Name:").grid(row = 0, column = 0, sticky = E, padx = 2, pady = 2)
+    Label(companion_window, text="Age:").grid(row = 1, column = 0, sticky = E, padx = 2, pady = 2)
+    Label(companion_window, text="Original Location:").grid(row = 2, column = 0, sticky = E, padx = 2, pady = 2)
+    Label(companion_window, text="travelerID:").grid(row = 3, column = 0, sticky = E, padx = 2, pady = 2)
+
+    Entry(companion_window, textvariable=name_string).grid(row = 0, column = 1, sticky = W, padx = 2, pady = 2)
+    Entry(companion_window, textvariable=age_string).grid(row = 1, column = 1, sticky = W, padx = 2, pady = 2)
+    Entry(companion_window, textvariable=origin_string).grid(row = 2, column = 1, sticky = W, padx = 2, pady = 2)
+    traveler_combo = ttk.Combobox(companion_window, values=valid_travelers, state="readonly")
+    traveler_combo.grid(row = 3, column = 1, sticky = W, padx = 3, pady = 2)
+
+    # Update the list of valid travelers whenever the user mouses over the combo
+    # Makes sure recently added travelers are avaliable to choose.
+    traveler_combo.bind("<Enter>", lambda event: update_companion_travelers(event, traveler_combo))
+
+    # Button to submit all attributes to controller for update.
+    submission_button = Button(companion_window, text="Update", command=lambda: update_tuple(
+        "Companion",
+        (   
+            tuple[0],
+            f"\'{name_string.get()}\'",
+            age_string.get(),
+            f"\'{origin_string.get()}\'", 
+            f"\'{tuple[4]}\'",  
+            traveler_combo.get()[0])))
+    submission_button.grid(row = 3, column = 2, sticky = S, padx = 2, pady = 2)  
+
 def update_tuple(table, tuple):
     print(tuple) # FIXME: DELETE ME!!!
 
@@ -568,7 +643,7 @@ def edit_item(tree, table, parent):
     elif table == "Traveler":
         edit_traveler_window(target_tuple, table, parent)
     elif table == "Companion":
-        target_key = "companionID"
+        edit_companion_window(target_tuple, table, parent)
     elif table == "Vehicle":
         target_key = "vehicleID"
     elif table == "Tool":
