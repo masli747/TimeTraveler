@@ -397,12 +397,14 @@ def build_edit_view(parent):
     build_edit_traveler_frame(edit_traveler_frame)
     build_edit_companion_frame(edit_companion_frame)
     build_edit_vehicle_frame(edit_vehicle_frame)
+    build_edit_tool_frame(edit_tool_frame)
 
     # Add frames to notebook
     edit_root_notebook.add(edit_trip_frame, text="Trip")
     edit_root_notebook.add(edit_traveler_frame, text="Traveler")
     edit_root_notebook.add(edit_companion_frame, text="Companion")
     edit_root_notebook.add(edit_vehicle_frame, text="Vehicle")
+    edit_root_notebook.add(edit_tool_frame, text="Tool")
 
     return edit_root_notebook
 
@@ -533,6 +535,37 @@ def build_edit_vehicle_frame(edit_vehicle_frame):
     delete_button.pack(side="left")
 
     edit_button = ttk.Button(edit_vehicle_frame, text='Edit Item', command=lambda: edit_item(vehicle_tree, "Vehicle", edit_vehicle_frame))
+    edit_button.pack(side="right")
+
+def build_edit_tool_frame(edit_tool_frame):
+    global ctrl_obj
+
+    # Create the Treeview widget with columns
+    tool_tree = ttk.Treeview(edit_tool_frame, columns=("id", "name", "capacity", "ttid"), show="headings")
+
+    # Define column headings
+    tool_tree.heading("id", text="Tool ID")
+    tool_tree.heading("name", text="Name")
+    tool_tree.heading("capacity", text="Power Capacity")
+    tool_tree.heading("ttid", text="Traveler ID")
+
+    # Get data from database to display
+    tool_array = ctrl_obj.select_all("Tools", True)
+
+    # Populate the Treeview with data from the array
+    populate_treeview(tool_tree, tool_array)
+
+    # Arrange the tree within the frame
+    tool_tree.pack(fill="both", expand=True)
+
+    # Dynamically update on cursor hover
+    tool_tree.bind("<Enter>", lambda event: populate_treeview(tool_tree, ctrl_obj.select_all("Tools", True)))
+
+    # Edit and Delete buttons
+    delete_button = ttk.Button(edit_tool_frame, text='Delete Item', command=lambda: drop_item(tool_tree, "Tool"))
+    delete_button.pack(side="left")
+
+    edit_button = ttk.Button(edit_tool_frame, text='Edit Item', command=lambda: edit_item(tool_tree, "Tool", edit_tool_frame))
     edit_button.pack(side="right")
 
 def edit_trip_window(tuple, table, parent):
@@ -676,7 +709,40 @@ def edit_vehicle_window(tuple, table, parent):
             power_capacity_string.get(),
             f"\'{engine_string.get()}\'",  
             traveler_combo.get()[0])))
-    submission_button.grid(row = 3, column = 2, sticky = S, padx = 2, pady = 2)    
+    submission_button.grid(row = 4, column = 2, sticky = S, padx = 2, pady = 2)    
+
+def edit_tool_window(tuple, table, parent):
+    tool_window = Toplevel(parent)
+    tool_window.title("Edit Tool")
+    tool_window.geometry("800x600")  
+
+    name_string = StringVar()
+    name_string.set(tuple[1])
+    power_capacity_string = StringVar()
+    power_capacity_string.set(tuple[2])
+    valid_travelers = ctrl_obj.select_all("Travelers", False)
+
+    Label(tool_window, text="Name:").grid(row = 0, column = 0, sticky = E, padx = 2, pady = 2)
+    Label(tool_window, text="Power Capacity:").grid(row = 1, column = 0, sticky = E, padx = 2, pady = 2)
+    Label(tool_window, text="travelerID:").grid(row = 2, column = 0, sticky = E, padx = 2, pady = 2)
+
+    Entry(tool_window, textvariable=name_string).grid(row = 0, column = 1, sticky = W, padx = 2, pady = 2)
+    Entry(tool_window, textvariable=power_capacity_string).grid(row = 1, column = 1, sticky = W, padx = 2, pady = 2)
+    traveler_combo = ttk.Combobox(tool_window, values=valid_travelers, state="readonly")
+    traveler_combo.grid(row = 2, column = 1, sticky = W, padx = 3, pady = 2)
+    # Update the list of valid travelers whenever the user mouses over the combo
+    # Makes sure recently added travelers are avaliable to choose.
+    traveler_combo.bind("<Enter>", lambda event: update_companion_travelers(event, traveler_combo))
+
+    # Button to submit all attributes to controller for update.
+    submission_button = Button(tool_window, text="Update", command=lambda: update_tuple(
+        "Tool",
+        (   
+            tuple[0],
+            f"\'{name_string.get()}\'", 
+            power_capacity_string.get(),
+            traveler_combo.get()[0])))
+    submission_button.grid(row = 3, column = 2, sticky = S, padx = 2, pady = 2)
 
 def update_tuple(table, tuple):
     print(tuple) # FIXME: DELETE ME!!!
@@ -719,7 +785,7 @@ def edit_item(tree, table, parent):
     elif table == "Vehicle":
         edit_vehicle_window(target_tuple, table, parent)
     elif table == "Tool":
-        target_key = "toolID"
+        edit_tool_window(target_tuple, table, parent)
     elif table == "VehicleAbility":
         target_key = "vehicleAbilityID"
     elif table == "ToolAbility":
