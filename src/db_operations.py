@@ -29,7 +29,7 @@ class db_operations:
     
     # Load MySQL configuration from configuration file.
     def get_mysql_config(self):
-        with open('src/config.json', 'r') as file:
+        with open('config.json', 'r') as file:
             config = json.load(file)
         return config.get('mysql', {})
     
@@ -65,7 +65,9 @@ class db_operations:
         self.cursor.execute(query, dictionary)
         return self.cursor.fetchall()
     
-    # Aggregations
+    def return_column_names(self, query):
+        self.cursor.execute(query)
+        return self.cursor.column_names
     
     # On deletion, clean up connection.
     def destructor(self):
