@@ -10,8 +10,13 @@ from tkinter import ttk
 from tkinter import messagebox, filedialog
 import pandas as pd
 
+from ttkthemes import *
+
 # Local DB imports
 from controller import controller
+from constants import Constants
+# from src.constants import Constants
+
 
 ctrl_obj = None
 
@@ -38,6 +43,7 @@ def build_add_view(parent):
     add_companion_view = ttk.Frame(insert_notebook)
     add_vehicle_view = ttk.Frame(insert_notebook)
     add_tool_view = ttk.Frame(insert_notebook)
+
 
     # Build each frame's widgets
     build_add_trip_frame(add_trip_view)
@@ -81,8 +87,8 @@ def build_add_trip_frame(add_trip_view):
 
     # Button to submit all attributes to controller for insertion.
     submission_button = ttk.Button(add_trip_view, text="Add", command=lambda: submit_trip(
-        location_string.get(), 
-        image_string.get(), 
+        location_string.get(),
+        image_string.get(),
         traveler_combo.get()))
     submission_button.grid(row = 3, column = 2, sticky = S, padx = 2, pady = 2)
 
@@ -97,7 +103,7 @@ def build_add_traveler_frame(add_traveler_view):
     age_lable.grid(row = 1, column = 0, sticky = W, padx = 4, pady = 2)
     location_lable.grid(row = 2, column = 0, sticky = W, padx = 4, pady = 2)
 
-    # Strings and Entry widgets for all Companion Attributes
+    # Strings and ttk.Entry widgets for all Companion Attributes
     name_string = StringVar()
     age_string = StringVar()
     location_string = StringVar()
@@ -108,7 +114,7 @@ def build_add_traveler_frame(add_traveler_view):
     age_entry.grid(row = 1, column = 1, pady = 2)
     location_entry.grid(row = 2, column = 1, pady = 2)
 
-    # Button to submit all attributes to controller for insertion.
+    # ttk.Button to submit all attributes to controller for insertion.
     submission_button = ttk.Button(add_traveler_view, text="Add", command=lambda: submit_traveler(
         name_string.get(), 
         age_string.get(), 
@@ -118,7 +124,7 @@ def build_add_traveler_frame(add_traveler_view):
     return
 
 def build_add_companion_frame(add_companion_view):
-    # Labels for all Companion Attributes
+    # ttk.Labels for all Companion Attributes
     name_label = ttk.Label(add_companion_view, text="Name:")
     age_lable = ttk.Label(add_companion_view, text="Age:")
     location_lable = ttk.Label(add_companion_view, text="Original Location:")
@@ -128,7 +134,7 @@ def build_add_companion_frame(add_companion_view):
     location_lable.grid(row = 2, column = 0, sticky = W, padx = 2, pady = 2)
     traveler_lable.grid(row = 3, column = 0, sticky = W, padx = 2, pady = 2)
     
-    # Strings and Entry widgets for all Companion Attributes
+    # Strings and ttk.Entry widgets for all Companion Attributes
     name_string = StringVar()
     age_string = StringVar()
     location_string = StringVar()
@@ -146,7 +152,7 @@ def build_add_companion_frame(add_companion_view):
     # Makes sure recently added travelers are avaliable to choose.
     traveler_combo.bind("<Enter>", lambda event: update_companion_travelers(event, traveler_combo))
     
-    # Button to submit all attributes to controller for insertion.
+    # ttk.Button to submit all attributes to controller for insertion.
     submission_button = ttk.Button(add_companion_view, text="Add", command=lambda: submit_companion(
         name_string.get(), 
         age_string.get(), 
@@ -156,7 +162,7 @@ def build_add_companion_frame(add_companion_view):
     return
 
 def build_add_vehicle_frame(add_vehicle_view):
-    # Labels for all Vehicle Attributes
+    # ttk.Labels for all Vehicle Attributes
     name_label = ttk.Label(add_vehicle_view, text="Name:")
     age_lable = ttk.Label(add_vehicle_view, text="Power Capacity:")
     location_lable = ttk.Label(add_vehicle_view, text="Engine:")
@@ -166,7 +172,7 @@ def build_add_vehicle_frame(add_vehicle_view):
     location_lable.grid(row = 2, column = 0, sticky = W, padx = 2, pady = 2)
     traveler_lable.grid(row = 3, column = 0, sticky = W, padx = 2, pady = 2)
 
-    # Strings and Entry widgets for all Vehicle Attributes
+    # Strings and ttk.Entry widgets for all Vehicle Attributes
     name_string = StringVar()
     power_string = StringVar()
     engine_string = StringVar()
@@ -184,7 +190,7 @@ def build_add_vehicle_frame(add_vehicle_view):
     # Makes sure recently added travelers are avaliable to choose.
     traveler_combo.bind("<Enter>", lambda event: update_companion_travelers(event, traveler_combo))
 
-    # Button to submit all attributes to controller for insertion.
+    # ttk.Button to submit all attributes to controller for insertion.
     submission_button = ttk.Button(add_vehicle_view, text="Add", command=lambda: submit_vehicle(
         name_string.get(), 
         power_string.get(), 
@@ -194,7 +200,7 @@ def build_add_vehicle_frame(add_vehicle_view):
     return
 
 def build_add_tool_frame(add_tool_view):
-    # Labels for all Tool Attributes
+    # ttk.Labels for all Tool Attributes
     name_label = ttk.Label(add_tool_view, text="Name:")
     age_lable = ttk.Label(add_tool_view, text="Power Capacity:")
     traveler_lable = ttk.Label(add_tool_view, text="Utilized By:")
@@ -202,7 +208,7 @@ def build_add_tool_frame(add_tool_view):
     age_lable.grid(row = 1, column = 0, sticky = W, padx = 2, pady = 2)
     traveler_lable.grid(row = 2, column = 0, sticky = W, padx = 2, pady = 2)
 
-    # Strings and Entry widgets for all Vehicle Attributes
+    # Strings and ttk.Entry widgets for all Vehicle Attributes
     name_string = StringVar()
     power_string = StringVar()
     valid_travelers = ctrl_obj.select_all("Travelers", False)
@@ -217,8 +223,8 @@ def build_add_tool_frame(add_tool_view):
     # Makes sure recently added travelers are avaliable to choose.
     traveler_combo.bind("<Enter>", lambda event: update_companion_travelers(event, traveler_combo))
 
-    # Button to submit all attributes to controller for insertion.
-    submission_button = Button(add_tool_view, text="Add", command=lambda: submit_tool(
+    # ttk.Button to submit all attributes to controller for insertion.
+    submission_button = ttk.Button(add_tool_view, text="Add", command=lambda: submit_tool(
         name_string.get(), 
         power_string.get(), 
         traveler_combo.get()))
@@ -233,15 +239,15 @@ def update_companion_travelers(event, combo):
 def submit_trip(location, image, traveler):
     # Make sure the user wants to insert a trip.
     insert = add_confirmation("Trip")
-    
+
     # Break out early if not returning
     if not insert:
         return
-    
+
     # Check user input for errors
     try:
         temp = traveler[0]
-        if location == "" or image == "": 
+        if location == "" or image == "":
             raise ValueError
         # print(name, age, location, traveler[0] if traveler[0] != None else "")
     except IndexError:
@@ -571,7 +577,7 @@ def build_edit_tool_frame(edit_tool_frame):
 def edit_trip_window(tuple, table, parent):
     trip_window = Toplevel(parent)
     trip_window.title("Edit Trip")
-    trip_window.geometry("800x600")  
+    trip_window.geometry("800x600")
 
     location_string = StringVar()
     location_string.set(tuple[1])
@@ -595,17 +601,17 @@ def edit_trip_window(tuple, table, parent):
     # Button to submit all attributes to controller for update.
     submission_button = Button(trip_window, text="Update", command=lambda: update_tuple(
         "Trip",
-        (   
+        (
             tuple[0],
-            f"\'{location_string.get()}\'", 
-            f"\'{image_string.get()}\'",  
+            f"\'{location_string.get()}\'",
+            f"\'{image_string.get()}\'",
             traveler_combo.get()[0])))
-    submission_button.grid(row = 3, column = 2, sticky = S, padx = 2, pady = 2)    
+    submission_button.grid(row = 3, column = 2, sticky = S, padx = 2, pady = 2)
 
 def edit_traveler_window(tuple, table, parent):
     traveler_window = Toplevel(parent)
     traveler_window.title("Edit Trip")
-    traveler_window.geometry("800x600")  
+    traveler_window.geometry("800x600")
 
     name_string = StringVar()
     name_string.set(tuple[1])
@@ -625,18 +631,18 @@ def edit_traveler_window(tuple, table, parent):
     # Button to submit all attributes to controller for update.
     submission_button = Button(traveler_window, text="Update", command=lambda: update_tuple(
         "Traveler",
-        (   
+        (
             tuple[0],
-            f"\'{name_string.get()}\'", 
-            age_string.get(),  
+            f"\'{name_string.get()}\'",
+            age_string.get(),
             f"\'{birthplace_string.get()}\'",
             f"\'{tuple[4]}\'")))
-    submission_button.grid(row = 3, column = 2, sticky = S, padx = 2, pady = 2)    
+    submission_button.grid(row = 3, column = 2, sticky = S, padx = 2, pady = 2)
 
 def edit_companion_window(tuple, table, parent):
     companion_window = Toplevel(parent)
     companion_window.title("Edit Companion")
-    companion_window.geometry("800x600")  
+    companion_window.geometry("800x600")
 
     name_string = StringVar()
     name_string.set(tuple[1])
@@ -664,19 +670,19 @@ def edit_companion_window(tuple, table, parent):
     # Button to submit all attributes to controller for update.
     submission_button = Button(companion_window, text="Update", command=lambda: update_tuple(
         "Companion",
-        (   
+        (
             tuple[0],
             f"\'{name_string.get()}\'",
             age_string.get(),
-            f"\'{origin_string.get()}\'", 
-            f"\'{tuple[4]}\'",  
+            f"\'{origin_string.get()}\'",
+            f"\'{tuple[4]}\'",
             traveler_combo.get()[0])))
-    submission_button.grid(row = 4, column = 2, sticky = S, padx = 2, pady = 2)  
+    submission_button.grid(row = 4, column = 2, sticky = S, padx = 2, pady = 2)
 
 def edit_vehicle_window(tuple, table, parent):
     vehicle_window = Toplevel(parent)
     vehicle_window.title("Edit Vehicle")
-    vehicle_window.geometry("800x600")  
+    vehicle_window.geometry("800x600")
 
     name_string = StringVar()
     name_string.set(tuple[1])
@@ -703,18 +709,18 @@ def edit_vehicle_window(tuple, table, parent):
     # Button to submit all attributes to controller for update.
     submission_button = Button(vehicle_window, text="Update", command=lambda: update_tuple(
         "Vehicle",
-        (   
+        (
             tuple[0],
-            f"\'{name_string.get()}\'", 
+            f"\'{name_string.get()}\'",
             power_capacity_string.get(),
-            f"\'{engine_string.get()}\'",  
+            f"\'{engine_string.get()}\'",
             traveler_combo.get()[0])))
-    submission_button.grid(row = 4, column = 2, sticky = S, padx = 2, pady = 2)    
+    submission_button.grid(row = 4, column = 2, sticky = S, padx = 2, pady = 2)
 
 def edit_tool_window(tuple, table, parent):
     tool_window = Toplevel(parent)
     tool_window.title("Edit Tool")
-    tool_window.geometry("800x600")  
+    tool_window.geometry("800x600")
 
     name_string = StringVar()
     name_string.set(tuple[1])
@@ -737,9 +743,9 @@ def edit_tool_window(tuple, table, parent):
     # Button to submit all attributes to controller for update.
     submission_button = Button(tool_window, text="Update", command=lambda: update_tuple(
         "Tool",
-        (   
+        (
             tuple[0],
-            f"\'{name_string.get()}\'", 
+            f"\'{name_string.get()}\'",
             power_capacity_string.get(),
             traveler_combo.get()[0])))
     submission_button.grid(row = 3, column = 2, sticky = S, padx = 2, pady = 2)
@@ -749,11 +755,11 @@ def update_tuple(table, tuple):
 
     # Make sure the user wants to insert a trip.
     insert = update_confirmation()
-    
+
     # Break out early if not returning
     if not insert:
         return
-    
+
     ctrl_obj.update_tuple(table, tuple)
     # if user wants to insert, add the trip into our db using controller.
     if insert:
@@ -775,7 +781,7 @@ def edit_item(tree, table, parent):
 
     if target_tuple == None:
         return
-    
+
     if table == "Trip":
         edit_trip_window(target_tuple, table, parent)
     elif table == "Traveler":
@@ -800,9 +806,9 @@ def drop_item(tree, table):
 
     if primary_key == None:
         return
-    
+
     primary_key = primary_key[0]
-    
+
     ctrl_obj.drop_tuple(primary_key, table)
 
 def get_tree_row(tree):
@@ -854,11 +860,21 @@ def build_database_view(parent):
     # Populate the frame
     build_view_aggregation_frame(aggregation_frame)
 
+    # Dynamically update on cursor hover
+    aggregation_frame.bind("<Enter>", lambda event: force_aggregate_redraw(aggregation_frame))
+
     # Add all types of notebooks to the parent notebook.
     view_notebook.add(table_notebook, text="Table Views")
     view_notebook.add(aggregate_notebook, text="Aggregation Views")
 
     return view_notebook
+
+def force_aggregate_redraw(aggregate_frame):
+    for widget in aggregate_frame.winfo_children():
+        widget.destroy()
+
+    build_view_aggregation_frame(aggregate_frame)
+    return
 
 def build_view_trip_frame(trip_frame):
     global ctrl_obj
@@ -1098,7 +1114,7 @@ def generate_database_report():
 
         # Ask the user where they want to save their report to.
         file_path = filedialog.asksaveasfile(mode='w', defaultextension=".csv")
-        
+
         # If user bails on saving, abort serializing the repot.
         if file_path is None:
             return
@@ -1124,6 +1140,27 @@ def main():
     root = Tk()
     root.title("The Time Traveler's Database")
     root.geometry("960x720")
+
+    style = ThemedStyle(root)
+    style.set_theme("black")
+    style.configure("TLabel", foreground=Constants.GOLD_GALLIFREYAN,background = Constants.BLUE_TARDIS)
+    style.configure("TButton", foreground=Constants.CHARCOAL_SONIC_SHADOW,background=Constants.PINK_COMPANION_ROSE)
+    style.configure("TFrame", background=Constants.BLUE_TARDIS)
+    style.configure("TEntry", foreground="green")
+    style.configure("TCombobox", foreground="red")
+    style.configure("TTreeview", foreground="orange")
+    style.configure("Treeview", foreground=Constants.SILVER_TIME_MIST,background=Constants.PURPLE_NEBULA,fieldbackground=Constants.BLUE_TARDIS)
+    style.configure("Treeview.Heading", foreground="pink",background=Constants.BLUE_TARDIS)
+
+
+    style.configure("TNotebook",background=Constants.PURPLE_NEBULA)
+    # Customize notebook tabs
+    style.configure("TNotebook.Tab",
+                    background="#003B6F",  # Unselected tab background (TARDIS Blue)
+                    foreground="white",)  # Unselected tab text
+    style.map("TNotebook.Tab",
+              background=[("selected", Constants.GOLD_GALLIFREYAN)],  # Selected tab background (Gallifreyan Gold)
+              foreground=[("selected", "black")])  # Selected tab text
 
     # Make a notebook, so we can switch between views.
     root_notebook = ttk.Notebook(root)
