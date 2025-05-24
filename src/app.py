@@ -14,7 +14,8 @@ from ttkthemes import *
 
 # Local DB imports
 from controller import controller
-from src.constants import Constants
+from constants import Constants
+# from src.constants import Constants
 
 
 ctrl_obj = None
@@ -859,11 +860,21 @@ def build_database_view(parent):
     # Populate the frame
     build_view_aggregation_frame(aggregation_frame)
 
+    # Dynamically update on cursor hover
+    aggregation_frame.bind("<Enter>", lambda event: force_aggregate_redraw(aggregation_frame))
+
     # Add all types of notebooks to the parent notebook.
     view_notebook.add(table_notebook, text="Table Views")
     view_notebook.add(aggregate_notebook, text="Aggregation Views")
 
     return view_notebook
+
+def force_aggregate_redraw(aggregate_frame):
+    for widget in aggregate_frame.winfo_children():
+        widget.destroy()
+
+    build_view_aggregation_frame(aggregate_frame)
+    return
 
 def build_view_trip_frame(trip_frame):
     global ctrl_obj
